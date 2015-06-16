@@ -12,11 +12,11 @@ import UIKit
  *  Returns an array of views which share the widest width O(n).
  *  The returned views are returned in the order of which they are given.
  *
- *  :param: views Views from which to find the widest ones.
+ *  - parameter views: Views from which to find the widest ones.
  *
- *  :returns: The views which share the widest width.
+ *  - returns: The views which share the widest width.
  */
-public func widestViews(#views: [UIView]) -> [UIView] {
+public func widestViews(views views: [UIView]) -> [UIView] {
     var widestViews = [UIView]()
     
     for view in views {
@@ -42,11 +42,11 @@ public func widestViews(#views: [UIView]) -> [UIView] {
  *  Returns the first widest view from the given array of views O(n).
  *  To return all widest views use the `wisdestViews` function.
  *
- *  :param: views Views from which to find the widest.
+ *  - parameter views: Views from which to find the widest.
  *
- *  :returns: The first widest view.
+ *  - returns: The first widest view.
  */
-public func widestView(#views: [UIView]) -> UIView! {
+public func widestView(views views: [UIView]) -> UIView! {
     let wideViews = widestViews(views: views)
     return wideViews.first
 }
@@ -55,11 +55,11 @@ public func widestView(#views: [UIView]) -> UIView! {
  *  Returns an array of views which share the tallest height O(n).
  *  The returned views are returned in the order of which they are given.
  *
- *  :param: views Views from which to find the tallest ones.
+ *  - parameter views: Views from which to find the tallest ones.
  *
- *  :returns: The views which share the tallest height.
+ *  - returns: The views which share the tallest height.
  */
-public func tallestViews(#views: [UIView]) -> [UIView] {
+public func tallestViews(views views: [UIView]) -> [UIView] {
     var tallestViews = [UIView]()
     
     for view in views {
@@ -85,11 +85,11 @@ public func tallestViews(#views: [UIView]) -> [UIView] {
  *  Returns the first tallest view from the given array of views O(n).
  *  To return all tallest views use the `tallestViews` function.
  *
- *  :param: views Views from which to find the tallest.
+ *  - parameter views: Views from which to find the tallest.
  *
- *  :returns: The first tallest view.
+ *  - returns: The first tallest view.
  */
-public func tallestView(#views: [UIView]) -> UIView! {
+public func tallestView(views views: [UIView]) -> UIView! {
     let tallViews = tallestViews(views: views)
     return tallViews.first
 }
@@ -98,12 +98,12 @@ public func tallestView(#views: [UIView]) -> UIView! {
  *  Function to retrieve the total combined width of the given views taking into
  *  account the space separating each view.
  *
- *  :param: views           Views which make up the accumulated width.
- *  :param: separatorLength The separator length between each views.
+ *  - parameter views:           Views which make up the accumulated width.
+ *  - parameter separatorLength: The separator length between each views.
  *
- *  :returns: The combined total width including the separation between views.
+ *  - returns: The combined total width including the separation between views.
  */
-public func totalWidth(#views: [UIView], #separatorLength: CGFloat) -> CGFloat {
+public func totalWidth(views views: [UIView], separatorLength: CGFloat) -> CGFloat {
     var totalWidth: CGFloat = 0.0
     for view in views {
         totalWidth += view.frame.size.width
@@ -114,11 +114,11 @@ public func totalWidth(#views: [UIView], #separatorLength: CGFloat) -> CGFloat {
 /**
  *  Function to retrieve the total combined width of the given views.
  *
- *  :param: views Views which make up the accumulated width.
+ *  - parameter views: Views which make up the accumulated width.
  *
- *  :returns: The combined total width.
+ *  - returns: The combined total width.
  */
-public func totalWidth(#views: [UIView]) -> CGFloat {
+public func totalWidth(views views: [UIView]) -> CGFloat {
     return totalWidth(views: views, separatorLength: 0.0)
 }
 
@@ -126,12 +126,12 @@ public func totalWidth(#views: [UIView]) -> CGFloat {
  *  Function to retrieve the total combined height of the given views taking into
  *  account the space separating each view.
  *
- *   :param: views           Views which make up the accumulated height.
- *  :param: separatorLength The separator length between each views.
+ *   - parameter views:           Views which make up the accumulated height.
+ *  - parameter separatorLength: The separator length between each views.
  *
- *  :returns: The combined total height including the separation between views.
+ *  - returns: The combined total height including the separation between views.
  */
-public func totalHeight(#views: [UIView], #separatorLength: CGFloat) -> CGFloat {
+public func totalHeight(views views: [UIView], separatorLength: CGFloat) -> CGFloat {
     var totalHeight: CGFloat = 0.0
     for view in views {
         totalHeight += view.frame.size.height
@@ -142,11 +142,11 @@ public func totalHeight(#views: [UIView], #separatorLength: CGFloat) -> CGFloat 
 /**
  *  Function to retrieve the total combined height of the given views.
  *
- *  :param: views Views which make up the accumulated height.
+ *  - parameter views: Views which make up the accumulated height.
  *
- *  :returns: The combined total height.
+ *  - returns: The combined total height.
  */
-public func totalHeight(#views: [UIView]) -> CGFloat {
+public func totalHeight(views views: [UIView]) -> CGFloat {
     return totalHeight(views: views, separatorLength: 0.0)
 }
 
@@ -165,10 +165,10 @@ public extension UIView {
     /**
      *  Hides or unhides the view with the option the animate the transition.
      *
-     *  :param: hidden     Wether the view is to be hidden or not.
-     *  :param: animated   Flag to animate the trasition.
-     *  :param: duration   The duration of the hiding animation if turned on.
-     *  :param: completion Call back when the view has been hid or unhid.
+     *  - parameter hidden:     Wether the view is to be hidden or not.
+     *  - parameter animated:   Flag to animate the trasition.
+     *  - parameter duration:   The duration of the hiding animation if turned on.
+     *  - parameter completion: Call back when the view has been hid or unhid.
      */
     public func setHidden(hide: Bool, animated: Bool, duration: Double, completion: ((Bool) -> Void)!) {
         if animated {
@@ -206,8 +206,8 @@ public extension UIView {
      *
      *  For tighter control over the transition use setHidden:animated:duration:completion:
      *
-     *  :param: hidden   Wether the view is to be hidden or not.
-     *  :param: animated Flag to animate the trasition.
+     *  - parameter hidden:   Wether the view is to be hidden or not.
+     *  - parameter animated: Flag to animate the trasition.
      */
     public func setHidden(hide: Bool, animated: Bool) {
         setHidden(hide, animated: animated, duration: Animations.Durations.Short.rawValue, completion: nil)
@@ -220,9 +220,9 @@ public extension UIView {
      *  center it in relation to the given frame.
      *  The returned X origin is floored.
      *
-     *  :param: frame The frame which the view will use to center itself.
+     *  - parameter frame: The frame which the view will use to center itself.
      *
-     *  :returns: The X origin for the view to take in order to be centered.
+     *  - returns: The X origin for the view to take in order to be centered.
      */
     public func horizontalCenterWithReferenceFrame(frame: CGRect) -> CGFloat {
         let offset = floor((frame.size.width - self.frame.size.width) / 2.0)
@@ -234,9 +234,9 @@ public extension UIView {
      *  center it in relation to the given frame.
      *  The returned Y origin is floored.
      *
-     *  :param: frame The frame which the view will use to center itself.
+     *  - parameter frame: The frame which the view will use to center itself.
      *
-     *  :returns: The Y origin for the view to take in order to be centered.
+     *  - returns: The Y origin for the view to take in order to be centered.
      */
     public func verticalCenterWithReferenceFrame(frame: CGRect) -> CGFloat {
         let offset = floor((frame.size.height - self.frame.size.height) / 2.0)
@@ -247,7 +247,7 @@ public extension UIView {
      *  This method centers the view to be centered on the X axis with relation
      *  to the passed frame.
      *
-     *  :param: rect The rect which is used as a horizontal centering reference.
+     *  - parameter rect: The rect which is used as a horizontal centering reference.
      */
     public func centerHorizontallyWithReferenceRect(rect: CGRect) {
         self.frame.origin.x = horizontalCenterWithReferenceFrame(rect)
@@ -257,7 +257,7 @@ public extension UIView {
      *  This method centers the view to be centered on the Y axis with relation
      *  to the passed frame.
      *
-     *  :param: rect The rect which is used as a vertical centering reference.
+     *  - parameter rect: The rect which is used as a vertical centering reference.
      */
     public func centerVerticallyWithReferenceRect(rect: CGRect) {
         self.frame.origin.y = verticalCenterWithReferenceFrame(rect)
@@ -268,7 +268,7 @@ public extension UIView {
     /**
      *  Method to set a rounded edges mask on the view's layer.
      *
-     *  :param: radius The radius to use for the rounded edges.
+     *  - parameter radius: The radius to use for the rounded edges.
      */
     public func maskToRadius(radius: CGFloat) {
         layer.cornerRadius = radius

@@ -46,28 +46,28 @@ public class FetchedResultsTableViewController: UITableViewController, NSFetched
     
     public override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let sections = fetchResultsController.sections {
-            let section = sections[section] as! NSFetchedResultsSectionInfo
+            let section = sections[section] as NSFetchedResultsSectionInfo
             return section.numberOfObjects
         }
         return 0
     }
     
     public override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let section = fetchResultsController.sections?[section] as! NSFetchedResultsSectionInfo
-        return section.name
+        let section = fetchResultsController.sections?[section]
+        return section?.name
     }
     
     public override func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
         return fetchResultsController.sectionForSectionIndexTitle(title, atIndex: index)
     }
     
-    public override func sectionIndexTitlesForTableView(tableView: UITableView) -> [AnyObject]! {
+    public override func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
         return fetchResultsController.sectionIndexTitles
     }
     
     public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cellIdentifier = cellIdentifierForIndexPath(indexPath)
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as UITableViewCell
         
         let object: AnyObject = fetchResultsController.objectAtIndexPath(indexPath)
         listView(tableView, configureCell: cell, withObject: object, atIndexPath: indexPath)
@@ -82,8 +82,8 @@ public class FetchedResultsTableViewController: UITableViewController, NSFetched
     
     // MARK: Fetched Results Controller
     
-    public func performFetch(error: NSErrorPointer) {
-        fetchResultsController.performFetch(error)
+    public func performFetch() throws {
+        try fetchResultsController.performFetch()
     }
     
     public func controllerWillChangeContent(controller: NSFetchedResultsController) {
@@ -101,7 +101,7 @@ public class FetchedResultsTableViewController: UITableViewController, NSFetched
         }
     }
     
-    public func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+    public func controller(controller: NSFetchedResultsController, didChangeObject anObject: NSManagedObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         switch type {
         case .Insert:
             tableView?.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)

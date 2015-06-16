@@ -51,7 +51,7 @@ public class FetchedResultsCollectionViewController: UICollectionViewController,
     
     override public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if let sections = fetchResultsController.sections {
-            let section = sections[section] as! NSFetchedResultsSectionInfo
+            let section = sections[section] as NSFetchedResultsSectionInfo
             return section.numberOfObjects
         }
         return 0
@@ -60,7 +60,7 @@ public class FetchedResultsCollectionViewController: UICollectionViewController,
     override public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cellIdentifier = cellIdentifierForIndexPath(indexPath)
 
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as! UICollectionViewCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as UICollectionViewCell
         
         let object: AnyObject = fetchResultsController.objectAtIndexPath(indexPath)
         listView(collectionView, configureCell: cell, withObject: object, atIndexPath: indexPath)
@@ -75,8 +75,8 @@ public class FetchedResultsCollectionViewController: UICollectionViewController,
 
     // MARK: Fetched Results Controller
 
-    public func performFetch(error: NSErrorPointer) {
-        fetchResultsController.performFetch(error)
+    public func performFetch() throws {
+        try fetchResultsController.performFetch()
     }
 
     public func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
@@ -85,7 +85,7 @@ public class FetchedResultsCollectionViewController: UICollectionViewController,
         sectionChanges += [change]
     }
 
-    public func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+    public func controller(controller: NSFetchedResultsController, didChangeObject anObject: NSManagedObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         var change = [NSFetchedResultsChangeType: [NSIndexPath]]()
         switch type {
         case .Insert:
@@ -125,8 +125,6 @@ public class FetchedResultsCollectionViewController: UICollectionViewController,
                         self.collectionView?.reloadItemsAtIndexPaths(indexPaths)
                     case .Move:
                         self.collectionView?.moveItemAtIndexPath(indexPaths.first!, toIndexPath: indexPaths.last!)
-                    default:
-                        break
                     }
                 }
             }

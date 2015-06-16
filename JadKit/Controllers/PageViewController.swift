@@ -109,9 +109,9 @@ public class PageViewController: UIPageViewController, UIPageViewControllerDataS
     /**
      *  The class for the page number to initialise at run time.
      *
-     *  :param: pageNumber The page number at which the class will be initialised.
+     *  - parameter pageNumber: The page number at which the class will be initialised.
      *
-     *  :returns: the class to be initialised
+     *  - returns: the class to be initialised
      */
     public func classTypeForPageAtIndex(index: UInt) -> PageContentViewController.Type! {
         return nil
@@ -120,9 +120,9 @@ public class PageViewController: UIPageViewController, UIPageViewControllerDataS
     /**
      *  The content object to help provide context to the currentContentViewController
      *
-     *  :param: pageNumber The page number for the content object.
+     *  - parameter pageNumber: The page number for the content object.
      *
-     *  :returns: The content object at the given page.
+     *  - returns: The content object at the given page.
      */
     public func contentObjectForPageAtIndex(index: UInt) -> AnyObject! {
         return nil
@@ -134,7 +134,7 @@ public class PageViewController: UIPageViewController, UIPageViewControllerDataS
      *  Method to override to allow subclasses to manipulate the controller object before it
      *  is fed back in the page view controller.
      *
-     *  :param: viewController The view controller to manipulate.
+     *  - parameter viewController: The view controller to manipulate.
      */
     public func pageViewWillSetViewController(controller: PageContentViewController) { }
 
@@ -143,7 +143,7 @@ public class PageViewController: UIPageViewController, UIPageViewControllerDataS
      */
     public func pageViewDidSwipe() {
         // Set the controller so that any objects observing this keypath get properly notified.
-        currentContentViewController = viewControllers.last as? PageContentViewController
+        currentContentViewController = viewControllers?.last as? PageContentViewController
     }
 
     // MARK: Logic
@@ -152,9 +152,9 @@ public class PageViewController: UIPageViewController, UIPageViewControllerDataS
      *  Method to jump to a certain page in the page view controller. Solution
      *  courtesy of http://stackoverflow.com/questions/13633059/uipageviewcontroller-how-do-i-correctly-jump-to-a-specific-page-without-messing
      *
-     *  :param: pageNumber The page number to jump to.
-     *  :param: direction The dirrection of the jump.
-     *  :param: animated Wether the jump is animated or not.
+     *  - parameter pageNumber: The page number to jump to.
+     *  - parameter direction: The dirrection of the jump.
+     *  - parameter animated: Wether the jump is animated or not.
      */
     private func jumpToPageIndex(pageIndex: UInt, withDirection direction: UIPageViewControllerNavigationDirection, animate: Bool) {
         // Create the initial view contorller from the given controller identifiers.
@@ -179,8 +179,8 @@ public class PageViewController: UIPageViewController, UIPageViewControllerDataS
     /**
      *  Jumps to the given page number and swipes to the corresponding page.
      *
-     *  :param: pageNumber The index to set.
-     *  :param: animated Wether the change is animated.
+     *  - parameter pageNumber: The index to set.
+     *  - parameter animated: Wether the change is animated.
      */
     public func jumpToPageIndex(pageIndex: UInt, animated: Bool) {
         if pageIndex == currentIndex || pageIndex >= numberOfPages {
@@ -254,7 +254,7 @@ public class PageViewController: UIPageViewController, UIPageViewControllerDataS
         return afterViewController
     }
 
-    public func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [AnyObject], transitionCompleted completed: Bool) {
+    public func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if completed {
             pageViewDidSwipe()
         }
