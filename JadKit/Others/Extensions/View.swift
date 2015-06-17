@@ -160,7 +160,7 @@ public extension UIView {
         }
     }
     
-    //MARK:- Hiding
+    // MARK: Hiding
     
     /**
      *  Hides or unhides the view with the option the animate the transition.
@@ -213,7 +213,7 @@ public extension UIView {
         setHidden(hide, animated: animated, duration: Animations.Durations.Short.rawValue, completion: nil)
     }
     
-    //MARK:- Positioning
+    // MARK: Positioning
     
     /**
      *  Calculates and returns the value for the X origin of the view which will
@@ -263,7 +263,7 @@ public extension UIView {
         self.frame.origin.y = verticalCenterWithReferenceFrame(rect)
     }
     
-    //MARK:- Masking
+    // MARK: Masking
     
     /**
      *  Method to set a rounded edges mask on the view's layer.
