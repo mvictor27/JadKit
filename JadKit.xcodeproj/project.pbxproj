@@ -17,6 +17,7 @@
 		050284781B19617E007167E8 /* Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050284761B19617E007167E8 /* Size.swift */; };
 		050284791B19617E007167E8 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050284771B19617E007167E8 /* View.swift */; };
 		0502847D1B1961B2007167E8 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0502847C1B1961B2007167E8 /* List.swift */; };
+		057690AD1B23BB3100D860E1 /* CoreDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057690AC1B23BB3100D860E1 /* CoreDataFetcher.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,7 @@
 		050284761B19617E007167E8 /* Size.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Size.swift; sourceTree = "<group>"; };
 		050284771B19617E007167E8 /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		0502847C1B1961B2007167E8 /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
+		057690AC1B23BB3100D860E1 /* CoreDataFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataFetcher.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				0502844E1B1960C0007167E8 /* JadKit.h */,
+				057690AC1B23BB3100D860E1 /* CoreDataFetcher.swift */,
 				050284721B196112007167E8 /* Views */,
 				0502846B1B1960F0007167E8 /* Controllers */,
 				050284751B196165007167E8 /* Others */,
@@ -277,6 +280,7 @@
 				050284701B19610D007167E8 /* FetchedResultsTableViewController.swift in Sources */,
 				0502846F1B19610D007167E8 /* FetchedResultsCollectionViewController.swift in Sources */,
 				050284741B196154007167E8 /* CircleImageView.swift in Sources */,
+				057690AD1B23BB3100D860E1 /* CoreDataFetcher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,7 +340,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -378,7 +382,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

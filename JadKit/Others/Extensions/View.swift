@@ -153,7 +153,7 @@ public func totalHeight(#views: [UIView]) -> CGFloat {
 public extension UIView {
     
     public struct Animations {
-        enum Durations: Double {
+        public enum Durations: Double {
             case Short = 0.3
             case Medium = 0.5
             case Long = 0.9
