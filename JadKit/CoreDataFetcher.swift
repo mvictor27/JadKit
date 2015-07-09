@@ -79,8 +79,8 @@ public class CoreDataFetcher: NSObject, NSFetchedResultsControllerDelegate {
 
     // MARK: Methods
 
-    public func performFetch(error: NSErrorPointer) {
-        fetchResultsController.performFetch(error)
+    public func performFetch() throws {
+        try fetchResultsController.performFetch()
     }
 
     public func numberOfSection() -> Int {
@@ -89,15 +89,15 @@ public class CoreDataFetcher: NSObject, NSFetchedResultsControllerDelegate {
 
     public func numberOfRowsInSection(section: Int) -> Int {
         if let sections = fetchResultsController.sections {
-            let section = sections[section] as! NSFetchedResultsSectionInfo
+            let section = sections[section] as NSFetchedResultsSectionInfo
             return section.numberOfObjects
         }
         return 0
     }
 
     public func titleForHeaderInSection(section: Int) -> String? {
-        let section = fetchResultsController.sections?[section] as! NSFetchedResultsSectionInfo
-        return section.name
+        let section = fetchResultsController.sections?[section]
+        return section?.name
     }
 
     public func sectionForSectionIndexTitle(title: String, atIndex index: Int) -> Int {
@@ -134,7 +134,7 @@ public class CoreDataFetcher: NSObject, NSFetchedResultsControllerDelegate {
             } else if view is UICollectionView {
                 collectionViewHandleControllerWillChangeContentFor(controller)
             } else {
-                println("The view provided is not supported by the fetcher. It will ignore this view: \(view)")
+                print("The view provided is not supported by the fetcher. It will ignore this view: \(view)")
             }
         }
 
@@ -148,7 +148,7 @@ public class CoreDataFetcher: NSObject, NSFetchedResultsControllerDelegate {
             } else if view is UICollectionView {
                 collectionViewHandleController(controller, didChangeSection: sectionInfo, atIndex: sectionIndex, forChangeType: type)
             } else {
-                println("The view provided is not supported by the fetcher. It will ignore this view: \(view)")
+                print("The view provided is not supported by the fetcher. It will ignore this view: \(view)")
             }
         }
 
@@ -156,14 +156,14 @@ public class CoreDataFetcher: NSObject, NSFetchedResultsControllerDelegate {
         delegate?.dataFetcher?(self, didChangeSection: sectionChange)
     }
 
-    public func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+  public func controller(controller: NSFetchedResultsController, didChangeObject anObject: NSManagedObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         if let view = fetchingView {
             if view is UITableView {
                 tableViewHandleController(controller, didChangeObject: anObject, atIndexPath: indexPath, forChangeType: type, newIndexPath: newIndexPath)
             } else if view is UICollectionView {
                 collectionViewHandleController(controller, didChangeObject: anObject, atIndexPath: indexPath, forChangeType: type, newIndexPath: newIndexPath)
             } else {
-                println("The view provided is not supported by the fetcher. It will ignore this view: \(view)")
+                print("The view provided is not supported by the fetcher. It will ignore this view: \(view)")
             }
         }
 
@@ -178,11 +178,12 @@ public class CoreDataFetcher: NSObject, NSFetchedResultsControllerDelegate {
             } else if view is UICollectionView {
                 collectionViewHandleControllerDidChangeContent(controller)
             } else {
-                println("The view provided is not supported by the fetcher. It will ignore this view: \(view)")
+                print("The view provided is not supported by the fetcher. It will ignore this view: \(view)")
             }
         }
 
-        dataFetchHandler?(balh blah blah)
+      // FIXME:
+//        dataFetchHandler?(balh blah blah)
         delegate?.dataFetcherDidChangeContent?(self)
     }
 }
