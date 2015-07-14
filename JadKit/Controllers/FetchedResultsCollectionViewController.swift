@@ -9,15 +9,15 @@
 import UIKit
 import CoreData
 
-public class FetchedResultsCollectionViewController: UICollectionViewController, NSFetchedResultsControllerDelegate, List {
+public class FetchedResultsCollectionViewController: UICollectionViewController, FetchedList {
 
     // MARK: Properties
 
-    public var fetchResultsController: NSFetchedResultsController! {
+    public var fetchedResultsController: NSFetchedResultsController! {
         didSet {
             sectionChanges.removeAll(keepCapacity: false)
             itemChanges.removeAll(keepCapacity: false)
-            fetchResultsController.delegate = self
+            fetchedResultsController.delegate = self
         }
     }
 
