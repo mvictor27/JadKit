@@ -21,7 +21,7 @@ public class FetchedResultsTableViewController: UITableViewController, TableFetc
     
     private let cellIdentifier = "Fetched Cell"
     
-    // MARK:- Abstract Methods
+    // MARK: TableFetchedList
 
     public func listView(listView: UIView, configureCell cell: UIView, withObject object: AnyObject, atIndexPath indexPath: NSIndexPath) {
         // Override me!
