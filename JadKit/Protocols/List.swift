@@ -9,7 +9,6 @@
 import UIKit
 
 @objc public protocol List {
-    
     /**
     The cell identifier for the given index path.
     
@@ -18,7 +17,7 @@ import UIKit
     - returns: The cell identifier.
     */
     func cellIdentifierForIndexPath(indexPath: NSIndexPath) -> String
-    
+        
     /**
     Helper method to configure a cell at the given index path with a given
     object.
