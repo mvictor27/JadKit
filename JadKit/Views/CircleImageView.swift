@@ -24,7 +24,7 @@ public class CircleImageView: UIImageView {
         self.init(frame: CGRect(x: 0.0, y: 0.0, width: size.width, height: size.height))
     }
 
-    required public init(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
