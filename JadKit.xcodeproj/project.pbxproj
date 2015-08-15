@@ -13,6 +13,7 @@
 		050284741B196154007167E8 /* CircleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050284731B196154007167E8 /* CircleImageView.swift */; };
 		052AF6031B63ED5B0039DFA1 /* NonFetchedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052AF6021B63ED5B0039DFA1 /* NonFetchedList.swift */; };
 		054A4BE11B54D513002D9ED7 /* FetchedResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0502846D1B19610D007167E8 /* FetchedResultsTableViewController.swift */; };
+		054F27AD1B7FB5DB0084261B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054F27AC1B7FB5DB0084261B /* ViewController.swift */; };
 		0567E0201B54C30A00C04CF3 /* Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0567E01A1B54C30A00C04CF3 /* Size.swift */; };
 		0567E0211B54C30A00C04CF3 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0567E01B1B54C30A00C04CF3 /* View.swift */; };
 		0567E0221B54C30A00C04CF3 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0567E01D1B54C30A00C04CF3 /* List.swift */; };
@@ -39,14 +40,13 @@
 		0502845B1B1960C0007167E8 /* JadKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JadKitTests.swift; sourceTree = "<group>"; };
 		0502846C1B19610D007167E8 /* FetchedResultsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsCollectionViewController.swift; sourceTree = "<group>"; };
 		0502846D1B19610D007167E8 /* FetchedResultsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsTableViewController.swift; sourceTree = "<group>"; };
-		0502846E1B19610D007167E8 /* PageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		050284731B196154007167E8 /* CircleImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleImageView.swift; sourceTree = "<group>"; };
 		052AF6021B63ED5B0039DFA1 /* NonFetchedList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonFetchedList.swift; sourceTree = "<group>"; };
+		054F27AC1B7FB5DB0084261B /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		0567E01A1B54C30A00C04CF3 /* Size.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Size.swift; sourceTree = "<group>"; };
 		0567E01B1B54C30A00C04CF3 /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		0567E01D1B54C30A00C04CF3 /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		0567E0241B54C32000C04CF3 /* FetchedList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedList.swift; sourceTree = "<group>"; };
-		057690AC1B23BB3100D860E1 /* CoreDataFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataFetcher.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,13 +89,12 @@
 		0502844B1B1960C0007167E8 /* JadKit */ = {
 			isa = PBXGroup;
 			children = (
-				0502846B1B1960F0007167E8 /* Controllers */,
-				057690AC1B23BB3100D860E1 /* CoreDataFetcher.swift */,
-				0567E0191B54C30A00C04CF3 /* Extensions */,
 				0502844E1B1960C0007167E8 /* JadKit.h */,
+				0502846B1B1960F0007167E8 /* Controllers */,
+				0567E0191B54C30A00C04CF3 /* Extensions */,
 				0567E01C1B54C30A00C04CF3 /* Protocols */,
-				0502844C1B1960C0007167E8 /* Supporting Files */,
 				050284721B196112007167E8 /* Views */,
+				0502844C1B1960C0007167E8 /* Supporting Files */,
 			);
 			path = JadKit;
 			sourceTree = "<group>";
@@ -130,7 +129,6 @@
 			children = (
 				0502846C1B19610D007167E8 /* FetchedResultsCollectionViewController.swift */,
 				0502846D1B19610D007167E8 /* FetchedResultsTableViewController.swift */,
-				0502846E1B19610D007167E8 /* PageViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -148,6 +146,7 @@
 			children = (
 				0567E01A1B54C30A00C04CF3 /* Size.swift */,
 				0567E01B1B54C30A00C04CF3 /* View.swift */,
+				054F27AC1B7FB5DB0084261B /* ViewController.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -274,6 +273,7 @@
 				0567E0251B54C32000C04CF3 /* FetchedList.swift in Sources */,
 				052AF6031B63ED5B0039DFA1 /* NonFetchedList.swift in Sources */,
 				0567E0221B54C30A00C04CF3 /* List.swift in Sources */,
+				054F27AD1B7FB5DB0084261B /* ViewController.swift in Sources */,
 				050284741B196154007167E8 /* CircleImageView.swift in Sources */,
 				0567E0201B54C30A00C04CF3 /* Size.swift in Sources */,
 				0567E0211B54C30A00C04CF3 /* View.swift in Sources */,

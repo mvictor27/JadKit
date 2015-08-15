@@ -157,12 +157,21 @@ public extension TableFetchedList {
 // MARK: - Collection
 
 @objc public protocol CollectionFetchedList: FetchedList, UICollectionViewDataSource, UICollectionViewDelegate {
+    /// The collection view to update with the fetched changes.
     var collectionView: UICollectionView! { get set }
     
-    /// Dictionary is of type: [NSFetchedResultsChangeType: Int]
+    /// Classes that conform to this protol only to initialize this property.
+    /// It is an array of dictionaries used to hold the section changes so that
+    /// the collection view can be animated in the same way a table view controller
+    /// handles section changes.
+    /// - note: The dictionary is of type: `[NSFetchedResultsChangeType: Int]`
     var sectionChanges: [NSMutableDictionary] { get set }
     
-    /// Dictionary of of type [NSFetchedResultsChangeType: [NSIndexPath]]
+    /// Classes that conform to this protol only to initialize this property.
+    /// It is an array of dictionaries used to hold the row changes so that
+    /// the collection view can be animated in the same way a table view controller
+    /// handles row changes.
+    /// - note: The dictionary of of type `[NSFetchedResultsChangeType: [NSIndexPath]]`
     var itemChanges: [NSMutableDictionary] { get set }
     
     func updateCollectionCell(cell: UICollectionViewCell, withObject object: AnyObject, atIndexPath indexPath: NSIndexPath)
