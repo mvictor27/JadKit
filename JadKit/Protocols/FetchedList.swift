@@ -14,20 +14,19 @@ import CoreData
 }
 
 public extension FetchedList {
-    func numberOfSection() -> Int {
-        return fetchedResultsController.sections?.count ?? 0
+    func numberOfSections() -> Int {
+        return fetchedResultsController?.sections?.count ?? 0
     }
     
     func numberOfRowsInSection(section: Int) -> Int {
-        if let sections = fetchedResultsController.sections {
-            let section = sections[section] as NSFetchedResultsSectionInfo
-            return section.numberOfObjects
+        if let sections = fetchedResultsController?.sections {
+            return sections[section].numberOfObjects
         }
         return 0
     }
     
     func isValidIndexPath(indexPath: NSIndexPath) -> Bool {
-        let numSections = numberOfSection()
+        let numSections = numberOfSections()
         let validSection = indexPath.section < numSections && indexPath.section >= 0
         
         let numRows = numberOfRowsInSection(indexPath.section)
@@ -40,19 +39,19 @@ public extension FetchedList {
         if isValidIndexPath(indexPath) == false {
             return nil
         }
-        return fetchedResultsController.objectAtIndexPath(indexPath)
+        return fetchedResultsController?.objectAtIndexPath(indexPath)
     }
     
-    func sectionIndexTitles() -> [AnyObject]! {
-        return fetchedResultsController.sectionIndexTitles
+    func sectionIndexTitles() -> [AnyObject]? {
+        return fetchedResultsController?.sectionIndexTitles
     }
     
-    func sectionForSectionIndexTitle(title: String, atIndex index: Int) -> Int {
-        return fetchedResultsController.sectionForSectionIndexTitle(title, atIndex: index)
+    func sectionForSectionIndexTitle(title: String, atIndex index: Int) -> Int? {
+        return fetchedResultsController?.sectionForSectionIndexTitle(title, atIndex: index)
     }
     
     func titleForHeaderInSection(section: Int) -> String? {
-        let section = fetchedResultsController.sections?[section]
+        let section = fetchedResultsController?.sections?[section]
         return section?.name
     }
 }
@@ -69,47 +68,21 @@ public extension FetchedList {
 UITableViewDelegate / UITableViewDataSource
 */
 public extension TableFetchedList {
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        if let sections = fetchedResultsController.sections {
-            return sections.count
-        }
-        return 0
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let sections = fetchedResultsController.sections {
-            let section = sections[section] as NSFetchedResultsSectionInfo
-            return section.numberOfObjects
-        }
-        return 0
-    }
-    
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let section = fetchedResultsController.sections?[section]
-        return section?.name
-    }
-    
-    func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
-        return fetchedResultsController.sectionForSectionIndexTitle(title, atIndex: index)
-    }
-    
-    func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
-        return fetchedResultsController.sectionIndexTitles
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableCellAtIndexPath(indexPath: NSIndexPath) -> UITableViewCell {
         let cellIdentifier = cellIdentifierForIndexPath(indexPath)
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as UITableViewCell
         
-        let object: AnyObject = fetchedResultsController.objectAtIndexPath(indexPath)
-        listView(tableView, configureCell: cell, withObject: object, atIndexPath: indexPath)
+        if let object = objectAtIndexPath(indexPath) {
+            listView(tableView, configureCell: cell, withObject: object, atIndexPath: indexPath)
+        }
         
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let object: AnyObject = fetchedResultsController.objectAtIndexPath(indexPath)
-        listView(tableView, didSelectObject: object, atIndexPath: indexPath)
+    func tableDidSelectItemAtIndexPath(indexPath: NSIndexPath) {
+        if let object = objectAtIndexPath(indexPath) {
+            listView(tableView, didSelectObject: object, atIndexPath: indexPath)
+        }
     }
 }
 
@@ -117,11 +90,11 @@ public extension TableFetchedList {
 NSFetchedResultsControllerDelegate
 */
 public extension TableFetchedList {
-    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+    func tableWillChangeContent() {
         tableView.beginUpdates()
     }
     
-    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+    func tableDidChangeSection(sectionIndex: Int, withChangeType type: NSFetchedResultsChangeType){
         switch type {
         case .Insert:
             tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Automatic)
@@ -132,7 +105,7 @@ public extension TableFetchedList {
         }
     }
     
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: NSManagedObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+    func tableDidChangeObjectAtIndexPath(indexPath: NSIndexPath?, withChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         switch type {
         case .Insert:
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
@@ -149,7 +122,7 @@ public extension TableFetchedList {
         }
     }
     
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+    func tableDidChangeContent() {
         tableView.endUpdates()
     }
 }
@@ -181,34 +154,22 @@ public extension TableFetchedList {
 UICollectionViewDelegate / UICollectionViewDataSource
 */
 public extension CollectionFetchedList {
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        if let sections = fetchedResultsController.sections {
-            return sections.count
-        }
-        return 0
-    }
-    
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let sections = fetchedResultsController.sections {
-            return sections[section].numberOfObjects
-        }
-        return 0
-    }
-    
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionCellAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewCell {
         let cellIdentifier = cellIdentifierForIndexPath(indexPath)
         
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as UICollectionViewCell
         
-        let object: AnyObject = fetchedResultsController.objectAtIndexPath(indexPath)
-        listView(collectionView, configureCell: cell, withObject: object, atIndexPath: indexPath)
+        if let object = objectAtIndexPath(indexPath) {
+            listView(collectionView, configureCell: cell, withObject: object, atIndexPath: indexPath)
+        }
         
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let object: AnyObject = fetchedResultsController.objectAtIndexPath(indexPath)
-        listView(collectionView, didSelectObject: object, atIndexPath: indexPath)
+    func collectionDidSelectItemAtIndexPath(indexPath: NSIndexPath) {
+        if let object = objectAtIndexPath(indexPath) {
+            listView(collectionView, didSelectObject: object, atIndexPath: indexPath)
+        }
     }
 }
 
@@ -216,13 +177,13 @@ public extension CollectionFetchedList {
 NSFetchedResultsControllerDelegate
 */
 public extension CollectionFetchedList {
-    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+    func collectionDidChangeSection(sectionIndex: Int, withChangeType type: NSFetchedResultsChangeType) {
         let change = NSMutableDictionary()
         change[NSNumber(changeType: type)] = NSNumber(integer: sectionIndex)
         sectionChanges += [change]
     }
     
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: NSManagedObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+    func collectionDidChangeObjectAtIndexPath(indexPath: NSIndexPath?, withChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         let change = NSMutableDictionary()
         switch type {
         case .Insert:
@@ -237,11 +198,11 @@ public extension CollectionFetchedList {
         itemChanges += [change]
     }
     
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+    func collectionDidChangeContent() {
         collectionView?.performBatchUpdates({
             for sectionChange in self.sectionChanges {
                 for (type, section) in sectionChange {
-                    switch type as! NSFetchedResultsChangeType {
+                    switch NSFetchedResultsChangeType(rawValue: type.unsignedLongValue)! {
                     case .Insert:
                         self.collectionView?.insertSections(NSIndexSet(index: section as! Int))
                     case .Delete:
@@ -254,7 +215,7 @@ public extension CollectionFetchedList {
             for itemChange in self.itemChanges {
                 for (type, indexPaths) in itemChange {
                     let castedIndexPaths = indexPaths as! [NSIndexPath]
-                    switch type as! NSFetchedResultsChangeType {
+                    switch NSFetchedResultsChangeType(rawValue: type.unsignedLongValue)! {
                     case .Insert:
                         self.collectionView?.insertItemsAtIndexPaths(castedIndexPaths)
                     case .Delete:
