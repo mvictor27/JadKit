@@ -9,7 +9,7 @@
 import UIKit
 
 public extension UIViewController {
-    public var isModal: Bool {
+    public var modal: Bool {
         if self.presentingViewController?.presentedViewController == self {
             return true
         }
