@@ -19,6 +19,7 @@
 		0567E0221B54C30A00C04CF3 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0567E01D1B54C30A00C04CF3 /* List.swift */; };
 		0567E0251B54C32000C04CF3 /* FetchedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0567E0241B54C32000C04CF3 /* FetchedList.swift */; };
 		05A209D51B5DA8AA0056D2B8 /* FetchedResultsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0502846C1B19610D007167E8 /* FetchedResultsCollectionViewController.swift */; };
+		05C805291BC4910900295AB1 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C805281BC4910900295AB1 /* Date.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		0567E01B1B54C30A00C04CF3 /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		0567E01D1B54C30A00C04CF3 /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		0567E0241B54C32000C04CF3 /* FetchedList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedList.swift; sourceTree = "<group>"; };
+		05C805281BC4910900295AB1 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +149,7 @@
 				0567E01A1B54C30A00C04CF3 /* Size.swift */,
 				0567E01B1B54C30A00C04CF3 /* View.swift */,
 				054F27AC1B7FB5DB0084261B /* ViewController.swift */,
+				05C805281BC4910900295AB1 /* Date.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0567E0251B54C32000C04CF3 /* FetchedList.swift in Sources */,
+				05C805291BC4910900295AB1 /* Date.swift in Sources */,
 				052AF6031B63ED5B0039DFA1 /* NonFetchedList.swift in Sources */,
 				0567E0221B54C30A00C04CF3 /* List.swift in Sources */,
 				054F27AD1B7FB5DB0084261B /* ViewController.swift in Sources */,
