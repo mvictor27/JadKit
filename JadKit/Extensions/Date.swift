@@ -8,10 +8,22 @@
 
 import Foundation
 
-private func <(lhs: NSDate, rhs: NSDate) -> Bool {
+public func ==(lhs: NSDate, rhs: NSDate) -> Bool {
+    return lhs.compare(rhs) == .OrderedSame
+}
+
+public func <(lhs: NSDate, rhs: NSDate) -> Bool {
   return lhs.compare(rhs) == .OrderedAscending
 }
 
-private func ==(lhs: NSDate, rhs: NSDate) -> Bool {
-  return lhs.compare(rhs) == .OrderedSame
+public func >(lhs: NSDate, rhs: NSDate) -> Bool {
+    return rhs < lhs
+}
+
+public func <=(lhs: NSDate, rhs: NSDate) -> Bool {
+    return (lhs > rhs) == false
+}
+
+public func >=(lhs: NSDate, rhs: NSDate) -> Bool {
+    return (lhs < rhs) == false
 }
