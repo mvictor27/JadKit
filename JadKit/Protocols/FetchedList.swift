@@ -134,20 +134,24 @@ public extension TableFetchedList {
     var collectionView: UICollectionView! { get set }
     
     /// Classes that conform to this protol only to initialize this property.
-    /// It is an array of dictionaries used to hold the section changes so that
+    /// It is an array of block operations used to hold the section and row changes so that
     /// the collection view can be animated in the same way a table view controller
     /// handles section changes.
-    /// - note: The dictionary is of type: `[NSFetchedResultsChangeType: Int]`
-    var sectionChanges: [NSMutableDictionary] { get set }
-    
-    /// Classes that conform to this protol only to initialize this property.
-    /// It is an array of dictionaries used to hold the row changes so that
-    /// the collection view can be animated in the same way a table view controller
-    /// handles row changes.
-    /// - note: The dictionary of of type `[NSFetchedResultsChangeType: [NSIndexPath]]`
-    var itemChanges: [NSMutableDictionary] { get set }
+    var changeOperations: [NSBlockOperation] { get set }
     
     func updateCollectionCell(cell: UICollectionViewCell, withObject object: AnyObject, atIndexPath indexPath: NSIndexPath)
+}
+
+/**
+Custom behaviour
+*/
+public extension CollectionFetchedList {
+    func cancelOperations() {
+        for operation: NSBlockOperation in changeOperations {
+            operation.cancel()
+        }
+        changeOperations.removeAll(keepCapacity: false)
+    }
 }
 
 /**
@@ -178,58 +182,80 @@ NSFetchedResultsControllerDelegate
 */
 public extension CollectionFetchedList {
     func collectionDidChangeSection(sectionIndex: Int, withChangeType type: NSFetchedResultsChangeType) {
-        let change = NSMutableDictionary()
-        change[NSNumber(changeType: type)] = NSNumber(integer: sectionIndex)
-        sectionChanges += [change]
+        switch type {
+        case .Insert:
+            changeOperations.append(
+                NSBlockOperation { [weak self] in
+                    if let weakSelf = self {
+                        weakSelf.collectionView.insertSections(NSIndexSet(index: sectionIndex))
+                    }
+                }
+            )
+        case .Update:
+            changeOperations.append(
+                NSBlockOperation { [weak self] in
+                    if let weakSelf = self {
+                        weakSelf.collectionView.reloadSections(NSIndexSet(index: sectionIndex))
+                    }
+                }
+            )
+        case .Delete:
+            changeOperations.append(
+                NSBlockOperation { [weak self] in
+                    if let weakSelf = self {
+                        weakSelf.collectionView.deleteSections(NSIndexSet(index: sectionIndex))
+                    }
+                }
+            )
+        default:
+            break
+        }
     }
     
     func collectionDidChangeObjectAtIndexPath(indexPath: NSIndexPath?, withChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        let change = NSMutableDictionary()
         switch type {
         case .Insert:
-            change[NSNumber(changeType: type)] = [newIndexPath!]
-        case .Delete:
-            change[NSNumber(changeType: type)] = [indexPath!]
+            changeOperations.append(
+                NSBlockOperation { [weak self] in
+                    if let weakSelf = self {
+                        weakSelf.collectionView.insertItemsAtIndexPaths([newIndexPath!])
+                    }
+                }
+            )
         case .Update:
-            change[NSNumber(changeType: type)] = [indexPath!]
+            changeOperations.append(
+                NSBlockOperation { [weak self] in
+                    if let weakSelf = self {
+                        weakSelf.collectionView.reloadItemsAtIndexPaths([indexPath!])
+                    }
+                }
+            )
         case .Move:
-            change[NSNumber(changeType: type)] = [indexPath!, newIndexPath!]
+            changeOperations.append(
+                NSBlockOperation { [weak self] in
+                    if let weakSelf = self {
+                        weakSelf.collectionView.moveItemAtIndexPath(indexPath!, toIndexPath: newIndexPath!)
+                    }
+                }
+            )
+        case .Delete:
+            changeOperations.append(
+                NSBlockOperation { [weak self] in
+                    if let weakSelf = self {
+                        weakSelf.collectionView.deleteItemsAtIndexPaths([indexPath!])
+                    }
+                }
+            )
         }
-        itemChanges += [change]
     }
     
     func collectionDidChangeContent() {
-        collectionView?.performBatchUpdates({
-            for sectionChange in self.sectionChanges {
-                for (type, section) in sectionChange {
-                    switch NSFetchedResultsChangeType(rawValue: type.unsignedLongValue)! {
-                    case .Insert:
-                        self.collectionView?.insertSections(NSIndexSet(index: section as! Int))
-                    case .Delete:
-                        self.collectionView?.deleteSections(NSIndexSet(index: section as! Int))
-                    default:
-                        break
-                    }
-                }
+        collectionView.performBatchUpdates({
+            for operation in self.changeOperations {
+                operation.start()
             }
-            for itemChange in self.itemChanges {
-                for (type, indexPaths) in itemChange {
-                    let castedIndexPaths = indexPaths as! [NSIndexPath]
-                    switch NSFetchedResultsChangeType(rawValue: type.unsignedLongValue)! {
-                    case .Insert:
-                        self.collectionView?.insertItemsAtIndexPaths(castedIndexPaths)
-                    case .Delete:
-                        self.collectionView?.deleteItemsAtIndexPaths(castedIndexPaths)
-                    case .Update:
-                        self.collectionView?.reloadItemsAtIndexPaths(castedIndexPaths)
-                    case .Move:
-                        self.collectionView?.moveItemAtIndexPath(castedIndexPaths.first!, toIndexPath: castedIndexPaths.last!)
-                    }
-                }
-            }
-            }, completion: { finished in
-                self.sectionChanges.removeAll(keepCapacity: false)
-                self.itemChanges.removeAll(keepCapacity: false)
+        }, completion: { finished in
+            self.changeOperations.removeAll(keepCapacity: false)
         })
     }
 }
