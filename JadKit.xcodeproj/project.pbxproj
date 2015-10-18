@@ -19,7 +19,7 @@
 		0567E0221B54C30A00C04CF3 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0567E01D1B54C30A00C04CF3 /* List.swift */; };
 		0567E0251B54C32000C04CF3 /* FetchedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0567E0241B54C32000C04CF3 /* FetchedList.swift */; };
 		05A209D51B5DA8AA0056D2B8 /* FetchedResultsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0502846C1B19610D007167E8 /* FetchedResultsCollectionViewController.swift */; };
-		05C805291BC4910900295AB1 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C805281BC4910900295AB1 /* Date.swift */; settings = {ASSET_TAGS = (); }; };
+		05C805291BC4910900295AB1 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C805281BC4910900295AB1 /* Date.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -227,6 +227,7 @@
 				TargetAttributes = {
 					050284481B1960C0007167E8 = {
 						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = DL393NZ5X7;
 					};
 					050284531B1960C0007167E8 = {
 						CreatedOnToolsVersion = 6.4;
@@ -399,6 +400,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -408,6 +411,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jadosseiran.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -417,6 +421,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -426,6 +432,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jadosseiran.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;

@@ -146,7 +146,7 @@ public extension TableFetchedList {
 Custom behaviour
 */
 public extension CollectionFetchedList {
-    func cancelOperations() {
+    func cancelCollectionViewChangeOperations() {
         for operation: NSBlockOperation in changeOperations {
             operation.cancel()
         }
