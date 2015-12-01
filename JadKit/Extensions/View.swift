@@ -103,23 +103,12 @@ public func tallestView(views views: [UIView]) -> UIView! {
  *
  *  - returns: The combined total width including the separation between views.
  */
-public func totalWidth(views views: [UIView], separatorLength: CGFloat) -> CGFloat {
+public func totalWidth(views views: [UIView], separatorLength: CGFloat = 0.0) -> CGFloat {
     var totalWidth: CGFloat = 0.0
     for view in views {
         totalWidth += view.frame.size.width
     }
     return totalWidth + (CGFloat(views.count - 1) * separatorLength)
-}
-
-/**
- *  Function to retrieve the total combined width of the given views.
- *
- *  - parameter views: Views which make up the accumulated width.
- *
- *  - returns: The combined total width.
- */
-public func totalWidth(views views: [UIView]) -> CGFloat {
-    return totalWidth(views: views, separatorLength: 0.0)
 }
 
 /**
@@ -131,23 +120,12 @@ public func totalWidth(views views: [UIView]) -> CGFloat {
  *
  *  - returns: The combined total height including the separation between views.
  */
-public func totalHeight(views views: [UIView], separatorLength: CGFloat) -> CGFloat {
+public func totalHeight(views views: [UIView], separatorLength: CGFloat = 0.0) -> CGFloat {
     var totalHeight: CGFloat = 0.0
     for view in views {
         totalHeight += view.frame.size.height
     }
     return totalHeight + (CGFloat(views.count - 1) * separatorLength)
-}
-
-/**
- *  Function to retrieve the total combined height of the given views.
- *
- *  - parameter views: Views which make up the accumulated height.
- *
- *  - returns: The combined total height.
- */
-public func totalHeight(views views: [UIView]) -> CGFloat {
-    return totalHeight(views: views, separatorLength: 0.0)
 }
 
 public extension UIView {
@@ -164,34 +142,65 @@ public extension UIView {
     /**
      *  Hides or unhides the view with the option the animate the transition.
      *
-     *  - parameter hidden:     Wether the view is to be hidden or not.
-     *  - parameter animated:   Flag to animate the trasition.
-     *  - parameter duration:   The duration of the hiding animation if turned on.
-     *  - parameter completion: Call back when the view has been hid or unhid.
+     *  - parameter hidden: Wether the view is to be hidden or not.
+     *  - parameter animated: Flag to animate the trasition.
+     *  - parameter duration: The duration of the hiding animation if turned on. `Short` by default.
+     *  - parameter effect: The `UIVisualEffect` that the view will take when it is shown again. `nil` by default.
+     *  - parameter completion: Call back when the view has been hid or unhid. `nil` by default.
      */
-    public func setHidden(hide: Bool, animated: Bool, duration: Double, completion: ((Bool) -> Void)!) {
+    public func setHidden(hide: Bool, animated: Bool, duration: Double = Animations.Durations.Short.rawValue, effect: UIVisualEffect? = nil, completion: ((Bool) -> Void)! = nil) {
         if animated {
             if hide {
                 UIView.animateWithDuration(duration, animations: {
-                    self.alpha = 0.0
-                    }, completion: { finished in
-                        if finished {
-                            self.hidden = true
+                    if #available(iOS 9, *) {
+                        if let effectView = self as? UIVisualEffectView {
+                            effectView.effect = nil
+                            effectView.contentView.alpha = 0.0
+                        } else {
+                            self.alpha = 0.0
                         }
-                        
-                        if completion != nil {
-                            completion(finished)
-                        }
+                    } else {
+                        self.alpha = 0.0
+                    }
+
+                }, completion: { finished in
+                    if finished {
+                        self.hidden = true
+                    }
+                    
+                    if completion != nil {
+                        completion(finished)
+                    }
                 })
             } else {
-                alpha = 0.0
+                if #available(iOS 9, *) {
+                    if let effectView = self as? UIVisualEffectView {
+                        effectView.contentView.alpha = 1.0
+                    } else {
+                        alpha = 0.0
+                    }
+                } else {
+                    alpha = 0.0
+                }
                 hidden = false
+
                 UIView.animateWithDuration(duration, animations: {
-                    self.alpha = 1.0
-                    }, completion: completion)
+                    if #available(iOS 9, *) {
+                        if let effectView = self as? UIVisualEffectView {
+                            effectView.effect = effect ?? UIBlurEffect(style: .Light)
+                            effectView.contentView.alpha = 1.0
+                        } else {
+                            self.alpha = 1.0
+                        }
+                    } else {
+                        self.alpha = 1.0
+                    }
+                }, completion: completion)
             }
         } else {
-            alpha = hide ? 0.0 : 1.0
+            if self is UIVisualEffectView == false {
+                alpha = hide ? 0.0 : 1.0
+            }
             hidden = hide
             
             if completion != nil {
@@ -199,19 +208,7 @@ public extension UIView {
             }
         }
     }
-    
-    /**
-     *  Hides or unhides the view with the option the animate the transition.
-     *
-     *  For tighter control over the transition use setHidden:animated:duration:completion:
-     *
-     *  - parameter hidden:   Wether the view is to be hidden or not.
-     *  - parameter animated: Flag to animate the trasition.
-     */
-    public func setHidden(hide: Bool, animated: Bool) {
-        setHidden(hide, animated: animated, duration: Animations.Durations.Short.rawValue, completion: nil)
-    }
-    
+
     // MARK: Positioning
     
     /**
