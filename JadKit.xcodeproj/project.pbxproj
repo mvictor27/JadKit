@@ -11,6 +11,7 @@
 		050284551B1960C0007167E8 /* JadKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050284491B1960C0007167E8 /* JadKit.framework */; };
 		0502845C1B1960C0007167E8 /* JadKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0502845B1B1960C0007167E8 /* JadKitTests.swift */; };
 		050284741B196154007167E8 /* CircleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050284731B196154007167E8 /* CircleImageView.swift */; };
+		051286631C0E845100192F2D /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051286621C0E845100192F2D /* Functions.swift */; };
 		052AF6031B63ED5B0039DFA1 /* NonFetchedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052AF6021B63ED5B0039DFA1 /* NonFetchedList.swift */; };
 		054A4BE11B54D513002D9ED7 /* FetchedResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0502846D1B19610D007167E8 /* FetchedResultsTableViewController.swift */; };
 		054F27AD1B7FB5DB0084261B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054F27AC1B7FB5DB0084261B /* ViewController.swift */; };
@@ -43,6 +44,7 @@
 		0502846C1B19610D007167E8 /* FetchedResultsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsCollectionViewController.swift; sourceTree = "<group>"; };
 		0502846D1B19610D007167E8 /* FetchedResultsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsTableViewController.swift; sourceTree = "<group>"; };
 		050284731B196154007167E8 /* CircleImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleImageView.swift; sourceTree = "<group>"; };
+		051286621C0E845100192F2D /* Functions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		052AF6021B63ED5B0039DFA1 /* NonFetchedList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonFetchedList.swift; sourceTree = "<group>"; };
 		054F27AC1B7FB5DB0084261B /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		055135AA1BF7D890000098F9 /* PaddedLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaddedLabel.swift; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				0502844E1B1960C0007167E8 /* JadKit.h */,
+				051286621C0E845100192F2D /* Functions.swift */,
 				0502846B1B1960F0007167E8 /* Controllers */,
 				0567E0191B54C30A00C04CF3 /* Extensions */,
 				0567E01C1B54C30A00C04CF3 /* Protocols */,
@@ -288,6 +291,7 @@
 				054A4BE11B54D513002D9ED7 /* FetchedResultsTableViewController.swift in Sources */,
 				055135AB1BF7D890000098F9 /* PaddedLabel.swift in Sources */,
 				05A209D51B5DA8AA0056D2B8 /* FetchedResultsCollectionViewController.swift in Sources */,
+				051286631C0E845100192F2D /* Functions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
