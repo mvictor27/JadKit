@@ -3,7 +3,35 @@
 //  JadKit
 //
 //  Created by Jad Osseiran on 7/13/15.
-//  Copyright © 2015 Jad Osseiran. All rights reserved.
+//  Copyright © 2016 Jad Osseiran. All rights reserved.
+//
+//  --------------------------------------------
+//
+//  Implements the protocol and their extensions to get a Core Data backed fetched list going.
+//
+//  --------------------------------------------
+//
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//  * Redistributions of source code must retain the above copyright notice,
+//  this list of conditions and the following disclaimer.
+//
+//  * Redistributions in binary form must reproduce the above copyright notice,
+//  this list of conditions and the following disclaimer in the documentation
+//  and/or other materials provided with the distribution.
+//
+//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+//  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+//  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+//  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+//  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+//  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+//  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+//  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+//  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+//  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+//  THE POSSIBILITY OF SUCH DAMAGE.
 //
 
 import Foundation
@@ -56,8 +84,7 @@ public extension FetchedList {
    - returns: `true` iff the index path is valid for your data source.
    */
   func isValidIndexPath(indexPath: NSIndexPath) -> Bool {
-    let validSection = indexPath.section < numberOfSections &&
-      indexPath.section >= 0
+    let validSection = indexPath.section < numberOfSections && indexPath.section >= 0
 
     let numRows = numberOfRowsInSection(indexPath.section)
     let validRow = indexPath.row < numRows && indexPath.row >= 0
@@ -75,7 +102,7 @@ public extension FetchedList {
    path or nil if the index path is invalid.
    */
   func objectAtIndexPath(indexPath: NSIndexPath) -> AnyObject? {
-    if isValidIndexPath(indexPath) == false {
+    guard isValidIndexPath(indexPath) else {
       return nil
     }
     return fetchedResultsController?.objectAtIndexPath(indexPath)
@@ -88,10 +115,8 @@ public extension FetchedList {
    - returns: The section number for a given section title and index
    in the section index or `nil` if none is found.
    */
-  func sectionForSectionIndexTitle(title: String, atIndex index: Int)
-    -> Int? {
-      return fetchedResultsController?.sectionForSectionIndexTitle(title,
-                                                                   atIndex: index)
+  func sectionForSectionIndexTitle(title: String, atIndex index: Int) -> Int? {
+    return fetchedResultsController?.sectionForSectionIndexTitle(title, atIndex: index)
   }
 
   /**
@@ -111,8 +136,7 @@ public extension FetchedList {
  Protocol to set up the conformance to the various protocols to allow
  for a valid table view protocol extension implementation.
  */
-@objc public protocol TableFetchedList: FetchedList, UITableViewDataSource,
-  UITableViewDelegate {
+@objc public protocol TableFetchedList: FetchedList, UITableViewDataSource, UITableViewDelegate {
   /// The table view that will be updated as the `fetchedResultsController`
   /// is updated.
   var tableView: UITableView! { get set }
@@ -123,7 +147,7 @@ public extension FetchedList {
    updated, not necessarily only on table load.
    */
   func updateTableCell(cell: UITableViewCell, withObject object: AnyObject,
-       atIndexPath indexPath: NSIndexPath)
+                       atIndexPath indexPath: NSIndexPath)
 }
 
 /**
@@ -132,12 +156,10 @@ public extension FetchedList {
 public extension TableFetchedList {
   func tableCellAtIndexPath(indexPath: NSIndexPath) -> UITableViewCell {
     let identifier = cellIdentifierForIndexPath(indexPath)
-    let cell = tableView.dequeueReusableCellWithIdentifier(identifier,
-                                                           forIndexPath: indexPath) as UITableViewCell
+    let cell = tableView.dequeueReusableCellWithIdentifier(identifier, forIndexPath: indexPath)
 
     if let object = objectAtIndexPath(indexPath) {
-      listView(tableView, configureCell: cell, withObject: object,
-                                               atIndexPath: indexPath)
+      listView(tableView, configureCell: cell, withObject: object, atIndexPath: indexPath)
     }
 
     return cell
@@ -159,43 +181,33 @@ public extension TableFetchedList {
     tableView.beginUpdates()
   }
 
-  func tableDidChangeSection(sectionIndex: Int, withChangeType
-    type: NSFetchedResultsChangeType) {
+  func tableDidChangeSection(sectionIndex: Int, withChangeType type: NSFetchedResultsChangeType) {
     switch type {
     case .Insert:
-      tableView.insertSections(NSIndexSet(index: sectionIndex),
-                               withRowAnimation: .Automatic)
+      tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Automatic)
     case .Delete:
-      tableView.deleteSections(NSIndexSet(index: sectionIndex),
-                               withRowAnimation: .Automatic)
+      tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Automatic)
     default:
       break
     }
   }
 
   func tableDidChangeObjectAtIndexPath(indexPath: NSIndexPath?,
-       withChangeType type: NSFetchedResultsChangeType,
-                      newIndexPath: NSIndexPath?) {
+                                       withChangeType type: NSFetchedResultsChangeType,
+                                       newIndexPath: NSIndexPath?) {
     switch type {
     case .Insert:
-      tableView.insertRowsAtIndexPaths([newIndexPath!],
-                                       withRowAnimation: .Automatic)
+      tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
     case .Delete:
-      tableView.deleteRowsAtIndexPaths([indexPath!],
-                                       withRowAnimation: .Automatic)
+      tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
     case .Update:
       if let cell = tableView.cellForRowAtIndexPath(indexPath!) {
-        let object =
-          fetchedResultsController.objectAtIndexPath(indexPath!)
-
-        updateTableCell(cell, withObject: object,
-                              atIndexPath: indexPath!)
+        let object = fetchedResultsController.objectAtIndexPath(indexPath!)
+        updateTableCell(cell, withObject: object, atIndexPath: indexPath!)
       }
     case .Move:
-      tableView.deleteRowsAtIndexPaths([indexPath!],
-                                       withRowAnimation: .Automatic)
-      tableView.insertRowsAtIndexPaths([newIndexPath!],
-                                       withRowAnimation: .Automatic)
+      tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+      tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
     }
   }
 
@@ -211,7 +223,7 @@ public extension TableFetchedList {
  for a valid collection view protocol extension implementation.
  */
 @objc public protocol CollectionFetchedList: FetchedList,
-  UICollectionViewDataSource, UICollectionViewDelegate {
+UICollectionViewDataSource, UICollectionViewDelegate {
   /// The collection view to update with the fetched changes.
   var collectionView: UICollectionView! { get set }
 
@@ -226,8 +238,8 @@ public extension TableFetchedList {
    object. This method is called every time a particular cell needs to be
    updated, not necessarily only on collection load.
    */
-  func updateCollectionCell(cell: UICollectionViewCell, withObject
-    object: AnyObject, atIndexPath indexPath: NSIndexPath)
+  func updateCollectionCell(cell: UICollectionViewCell, withObject object: AnyObject,
+                            atIndexPath indexPath: NSIndexPath)
 }
 
 /**
@@ -247,26 +259,22 @@ public extension CollectionFetchedList {
  data source methods.
  */
 public extension CollectionFetchedList {
-  func collectionCellAtIndexPath(indexPath: NSIndexPath)
-    -> UICollectionViewCell {
-      let identifier = cellIdentifierForIndexPath(indexPath)
+  func collectionCellAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewCell {
+    let identifier = cellIdentifierForIndexPath(indexPath)
 
-      let cell =
-        collectionView.dequeueReusableCellWithReuseIdentifier(identifier,
-                                                              forIndexPath: indexPath) as UICollectionViewCell
+    let cell = collectionView.dequeueReusableCellWithReuseIdentifier(identifier,
+                                                                     forIndexPath: indexPath)
 
-      if let object = objectAtIndexPath(indexPath) {
-        listView(collectionView, configureCell: cell,
-                                 withObject: object, atIndexPath: indexPath)
-      }
+    if let object = objectAtIndexPath(indexPath) {
+      listView(collectionView, configureCell: cell, withObject: object, atIndexPath: indexPath)
+    }
 
-      return cell
+    return cell
   }
 
   func collectionDidSelectItemAtIndexPath(indexPath: NSIndexPath) {
     if let object = objectAtIndexPath(indexPath) {
-      listView(collectionView, didSelectObject: object,
-                               atIndexPath: indexPath)
+      listView(collectionView, didSelectObject: object, atIndexPath: indexPath)
     }
   }
 }
@@ -277,7 +285,7 @@ public extension CollectionFetchedList {
  */
 public extension CollectionFetchedList {
   func collectionDidChangeSection(sectionIndex: Int,
-       withChangeType type: NSFetchedResultsChangeType) {
+                                  withChangeType type: NSFetchedResultsChangeType) {
     let indexSet = NSIndexSet(index: sectionIndex)
 
     switch type {
@@ -305,8 +313,8 @@ public extension CollectionFetchedList {
   }
 
   func collectionDidChangeObjectAtIndexPath(indexPath: NSIndexPath?,
-       withChangeType type: NSFetchedResultsChangeType,
-                      newIndexPath: NSIndexPath?) {
+                                            withChangeType type: NSFetchedResultsChangeType,
+                                            newIndexPath: NSIndexPath?) {
     switch type {
     case .Insert:
       changeOperations.append(
@@ -344,7 +352,7 @@ public extension CollectionFetchedList {
       for operation in self.changeOperations {
         operation.start()
       }
-      }, completion: { finished in
+    }, completion: { finished in
         self.changeOperations.removeAll(keepCapacity: false)
     })
   }

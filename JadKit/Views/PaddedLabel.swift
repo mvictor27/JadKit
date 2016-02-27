@@ -3,68 +3,109 @@
 //  JadKit
 //
 //  Created by Jad Osseiran on 11/14/15.
-//  Copyright © 2015 Jad Osseiran. All rights reserved.
+//  Copyright © 2016 Jad Osseiran. All rights reserved.
+//
+//  --------------------------------------------
+//
+//  IB friendly padded UILabel.
+//
+//  --------------------------------------------
+//
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//  * Redistributions of source code must retain the above copyright notice,
+//  this list of conditions and the following disclaimer.
+//
+//  * Redistributions in binary form must reproduce the above copyright notice,
+//  this list of conditions and the following disclaimer in the documentation
+//  and/or other materials provided with the distribution.
+//
+//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+//  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+//  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+//  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+//  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+//  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+//  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+//  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+//  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+//  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+//  THE POSSIBILITY OF SUCH DAMAGE.
 //
 
 import UIKit
 
+/**
+ An Interface Builder integrated class that allows for padding between the text and the 
+ frame of a UILabel.
+ */
 @IBDesignable
 public class PaddedLabel: UILabel {
 
-    @IBInspectable public var inset: CGSize = CGSize(width: 0.0, height: 0.0)
+  /// IB exposed insets that control the padding for the label.
+  /// - note: `width` translates to the `left` & `right` of the backing `UIEdgeInsets` object
+  /// and `height` translates to the `top` and `bottom` of that same `UIEdgeInsets` object.
+  @IBInspectable public var inset: CGSize = CGSize(width: 0.0, height: 0.0)
 
-    public var padding: UIEdgeInsets {
-        var hasText: Bool = false
+  /// The driving object that controls the padding for each edge.
+  public var padding: UIEdgeInsets {
+    var hasText: Bool = false
 
-        if let text = text?.characters.count where text > 0 {
-            hasText = true
-        } else if let text = attributedText?.length where text > 0 {
-            hasText = true
-        }
-
-        return hasText ? UIEdgeInsets(top: inset.height, left: inset.width, bottom: inset.height, right: inset.width) : UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    if let text = text?.characters.count where text > 0 {
+      hasText = true
+    } else if let text = attributedText?.length where text > 0 {
+      hasText = true
     }
 
-    public override func drawTextInRect(rect: CGRect) {
-        super.drawTextInRect(UIEdgeInsetsInsetRect(rect, padding))
-    }
+    return hasText ? UIEdgeInsets(top: inset.height, left: inset.width,
+                                  bottom: inset.height, right: inset.width) : UIEdgeInsets()
+  }
 
-    // FIXME: This is still not perfect. Spend some time trying to understand it.
-    override public func textRectForBounds(bounds: CGRect, limitedToNumberOfLines numberOfLines: Int) -> CGRect {
-        var rect = super.textRectForBounds(bounds, limitedToNumberOfLines: numberOfLines)
+  public override func drawTextInRect(rect: CGRect) {
+    super.drawTextInRect(UIEdgeInsetsInsetRect(rect, padding))
+  }
 
-        if let text = text {
-            let estimatedWidth = CGRectGetWidth(rect) - (2 * (padding.left + padding.right))
-            let estimatedHeight = CGFloat.max
+  // FIXME: This is still not perfect. Spend some time trying to understand it.
+  public override func textRectForBounds(bounds: CGRect, limitedToNumberOfLines numberOfLines: Int)
+    -> CGRect {
+      var rect = super.textRectForBounds(bounds, limitedToNumberOfLines: numberOfLines)
 
-            let boundingSize = CGSize(width: estimatedWidth, height: estimatedHeight)
-            let calculatedFrame = NSString(string: text).boundingRectWithSize(boundingSize, options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName : font], context: nil)
+      if let text = text {
+        let estimatedWidth = CGRectGetWidth(rect) - (2 * (padding.left + padding.right))
+        let estimatedHeight = CGFloat.max
 
-            let calculatedWidth = ceil(CGRectGetWidth(calculatedFrame))
-            let calculatedHeight = ceil(CGRectGetHeight(calculatedFrame))
+        let boundingSize = CGSize(width: estimatedWidth, height: estimatedHeight)
+        let calculatedFrame = text.boundingRectWithSize(boundingSize,
+                                                        options: .UsesLineFragmentOrigin,
+                                                        attributes: [NSFontAttributeName : font],
+                                                        context: nil)
 
-//            let finalHeight = (calculatedHeight + padding.top + padding.bottom)
-            rect.size = CGSize(width: calculatedWidth, height: calculatedHeight)
-        }
+        let calculatedWidth = ceil(CGRectGetWidth(calculatedFrame))
+        let calculatedHeight = ceil(CGRectGetHeight(calculatedFrame))
 
-        return rect
-    }
+        // let finalHeight = (calculatedHeight + padding.top + padding.bottom)
+        rect.size = CGSize(width: calculatedWidth, height: calculatedHeight)
+      }
+      
+      return rect
+  }
 
-    public override func intrinsicContentSize() -> CGSize {
-        let superContentSize = super.intrinsicContentSize()
+  public override func intrinsicContentSize() -> CGSize {
+    let superContentSize = super.intrinsicContentSize()
 
-        let width = superContentSize.width + padding.left + padding.right
-        let heigth = superContentSize.height + padding.top + padding.bottom
+    let width = superContentSize.width + padding.left + padding.right
+    let heigth = superContentSize.height + padding.top + padding.bottom
 
-        return CGSize(width: width, height: heigth)
-    }
+    return CGSize(width: width, height: heigth)
+  }
 
-    public override func sizeThatFits(size: CGSize) -> CGSize {
-        let superSizeThatFits = super.sizeThatFits(size)
+  public override func sizeThatFits(size: CGSize) -> CGSize {
+    let superSizeThatFits = super.sizeThatFits(size)
 
-        let width = superSizeThatFits.width + padding.left + padding.right
-        let heigth = superSizeThatFits.height + padding.top + padding.bottom
+    let width = superSizeThatFits.width + padding.left + padding.right
+    let heigth = superSizeThatFits.height + padding.top + padding.bottom
 
-        return CGSize(width: width, height: heigth)
-    }
+    return CGSize(width: width, height: heigth)
+  }
 }

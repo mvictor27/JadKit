@@ -3,7 +3,35 @@
 //  JadKit
 //
 //  Created by Jad Osseiran on 7/25/15.
-//  Copyright © 2015 Jad Osseiran. All rights reserved.
+//  Copyright © 2016 Jad Osseiran. All rights reserved.
+//
+//  --------------------------------------------
+//
+//  Implements the protocol and their extensions to get a simple non-fetched list going.
+//
+//  --------------------------------------------
+//
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//  * Redistributions of source code must retain the above copyright notice,
+//  this list of conditions and the following disclaimer.
+//
+//  * Redistributions in binary form must reproduce the above copyright notice,
+//  this list of conditions and the following disclaimer in the documentation
+//  and/or other materials provided with the distribution.
+//
+//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+//  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+//  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+//  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+//  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+//  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+//  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+//  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+//  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+//  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+//  THE POSSIBILITY OF SUCH DAMAGE.
 //
 
 import Foundation
@@ -58,36 +86,32 @@ public extension NonFetchedList {
  for a valid table view protocol extension implementation.
  */
 @objc public protocol TableList: NonFetchedList,
-  UITableViewDataSource, UITableViewDelegate { }
+UITableViewDataSource, UITableViewDelegate { }
 
 /**
  Protocol extension to implement the table view delegate & data source methods.
  */
 public extension TableList {
-  func tableView(tableView: UITableView, numberOfRowsInSection section: Int)
-    -> Int {
-      return listData.count
+  func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    return listData.count
   }
 
-  func tableView(tableView: UITableView, cellForRowAtIndexPath
-    indexPath: NSIndexPath) -> UITableViewCell {
-    let identifier = cellIdentifierForIndexPath(indexPath)
-    let cell = tableView.dequeueReusableCellWithIdentifier(identifier,
-                                                           forIndexPath: indexPath)
+  func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath)
+    -> UITableViewCell {
+      let identifier = cellIdentifierForIndexPath(indexPath)
+      let cell = tableView.dequeueReusableCellWithIdentifier(identifier,
+                                                             forIndexPath: indexPath)
 
-    if let object = objectAtIndexPath(indexPath) {
-      listView(tableView, configureCell: cell, withObject: object,
-                                               atIndexPath: indexPath)
-    }
+      if let object = objectAtIndexPath(indexPath) {
+        listView(tableView, configureCell: cell, withObject: object, atIndexPath: indexPath)
+      }
 
-    return cell
+      return cell
   }
 
-  func tableView(tableView: UITableView, didSelectRowAtIndexPath
-    indexPath: NSIndexPath) {
+  func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
     if let object = objectAtIndexPath(indexPath) {
-      listView(tableView, didSelectObject: object,
-                          atIndexPath: indexPath)
+      listView(tableView, didSelectObject: object, atIndexPath: indexPath)
     }
   }
 }
@@ -106,32 +130,29 @@ public extension TableList {
  source methods.
  */
 public extension CollectionList {
-  func collectionView(collectionView: UICollectionView,
-       numberOfItemsInSection section: Int) -> Int {
-    return listData.count
+  func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int)
+    -> Int {
+      return listData.count
   }
 
   func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath
     indexPath: NSIndexPath) -> UICollectionViewCell {
-    let identifier = cellIdentifierForIndexPath(indexPath)
+      let identifier = cellIdentifierForIndexPath(indexPath)
 
-    let cell =
-      collectionView.dequeueReusableCellWithReuseIdentifier(identifier,
-                                                            forIndexPath: indexPath) as UICollectionViewCell
+      let cell = collectionView.dequeueReusableCellWithReuseIdentifier(identifier,
+                                                                       forIndexPath: indexPath)
 
-    if let object = objectAtIndexPath(indexPath) {
-      listView(collectionView, configureCell: cell,
-                               withObject: object, atIndexPath: indexPath)
-    }
+      if let object = objectAtIndexPath(indexPath) {
+        listView(collectionView, configureCell: cell, withObject: object, atIndexPath: indexPath)
+      }
 
-    return cell
+      return cell
   }
 
   func collectionView(collectionView: UICollectionView,
-       didSelectItemAtIndexPath indexPath: NSIndexPath) {
+                      didSelectItemAtIndexPath indexPath: NSIndexPath) {
     if let object = objectAtIndexPath(indexPath) {
-      listView(collectionView, didSelectObject: object,
-                               atIndexPath: indexPath)
+      listView(collectionView, didSelectObject: object, atIndexPath: indexPath)
     }
   }
 }
