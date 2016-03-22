@@ -41,11 +41,11 @@ import UIKit
  */
 public protocol List {
   /// The list view for the list (i.e. `UITableView`).
-  typealias ListView
+  associatedtype ListView
   /// The list cell view (i.e. `UITableViewCell`).
-  typealias Cell
+  associatedtype Cell
   /// The object that is tied to each cell.
-  typealias Object
+  associatedtype Object
 
   /**
    The cell identifier for the given index path.
