@@ -44,7 +44,7 @@ import UIKit
  - returns: The views which share the widest width.
  - complexity: O(n)
  */
-public func widestViews(views views: [UIView]) -> [UIView] {
+public func widestViews(_ views: [UIView]) -> [UIView] {
   var widestViews = [UIView]()
 
   for view in views {
@@ -53,7 +53,7 @@ public func widestViews(views views: [UIView]) -> [UIView] {
       let viewWidth = view.frame.size.width
 
       if widestWidth < viewWidth {
-        widestViews.removeAll(keepCapacity: false)
+        widestViews.removeAll(keepingCapacity: false)
         widestViews += [view]
       } else if widestWidth == viewWidth {
         widestViews += [view]
@@ -73,8 +73,8 @@ public func widestViews(views views: [UIView]) -> [UIView] {
  - returns: The first widest view.
  - complexity: O(n)
  */
-public func widestView(views views: [UIView]) -> UIView {
-  let wideViews = widestViews(views: views)
+public func widestView(_ views: [UIView]) -> UIView {
+  let wideViews = widestViews(views)
   return wideViews.first!
 }
 
@@ -85,7 +85,7 @@ public func widestView(views views: [UIView]) -> UIView {
  - returns: The views which share the tallest height.
  - complexity: O(n)
  */
-public func tallestViews(views views: [UIView]) -> [UIView] {
+public func tallestViews(_ views: [UIView]) -> [UIView] {
   var tallestViews = [UIView]()
 
   for view in views {
@@ -94,7 +94,7 @@ public func tallestViews(views views: [UIView]) -> [UIView] {
       let viewHeight = view.frame.size.height
 
       if tallestHeight < viewHeight {
-        tallestViews.removeAll(keepCapacity: false)
+        tallestViews.removeAll(keepingCapacity: false)
         tallestViews += [view]
       } else if tallestHeight == viewHeight {
         tallestViews += [view]
@@ -114,8 +114,8 @@ public func tallestViews(views views: [UIView]) -> [UIView] {
  - returns: The first tallest view.
  - complexity: O(n)
  */
-public func tallestView(views views: [UIView]) -> UIView {
-  let tallViews = tallestViews(views: views)
+public func tallestView(_ views: [UIView]) -> UIView {
+  let tallViews = tallestViews(views)
   return tallViews.first!
 }
 
@@ -127,7 +127,7 @@ public func tallestView(views views: [UIView]) -> UIView {
  - returns: The combined total width including the separation between views.
  - complexity: O(n)
  */
-public func totalWidth(views views: [UIView], separatorLength: CGFloat = 0.0) -> CGFloat {
+public func totalWidth(_ views: [UIView], separatorLength: CGFloat = 0.0) -> CGFloat {
   var totalWidth: CGFloat = 0.0
   for view in views {
     totalWidth += view.frame.size.width
@@ -143,7 +143,7 @@ public func totalWidth(views views: [UIView], separatorLength: CGFloat = 0.0) ->
  - returns: The combined total height including the separation between views.
  - complexity: O(n)
  */
-public func totalHeight(views views: [UIView], separatorLength: CGFloat = 0.0) -> CGFloat {
+public func totalHeight(_ views: [UIView], separatorLength: CGFloat = 0.0) -> CGFloat {
   var totalHeight: CGFloat = 0.0
   for view in views {
     totalHeight += view.frame.size.height
@@ -152,152 +152,156 @@ public func totalHeight(views views: [UIView], separatorLength: CGFloat = 0.0) -
 }
 
 public extension UIView {
-  /**
-   The duration for an animation.
-   */
-  public enum AnimationDuration: Double {
-    /// 0.3s, quick animation.
-    case Short = 0.3
-    /// 0.6s, twice as long as the `Short` duration.
-    case Medium = 0.6
-    /// 0.9s, three times as long as the `Short` duration.
-    case Long = 0.9
-  }
-
-  // MARK: Hiding
-
-  // FIXME: This method could get some loving, specially with the iOS 9 UIVisualEffectView stuff.
-  /**
-   Hides or unhides the view with the option the animate the transition.
-   - parameter hidden: Wether the view is to be hidden or not.
-   - parameter animated: Flag to animate the trasition.
-   - parameter duration: The duration of the hiding animation if turned on. `Short` by default.
-   - parameter effect: The `UIVisualEffect` that the view will take when it is shown again.
-   `nil` by default.
-   - parameter completion: Call back when the view has been hid or unhid. `nil` by default.
-   */
-  public func setHidden(hide: Bool, animated: Bool,
-                        duration: Double = AnimationDuration.Short.rawValue,
-                        effect: UIVisualEffect? = nil, completion: ((Bool) -> Void)! = nil) {
-    if animated {
-      if hide {
-        UIView.animateWithDuration(duration, animations: {
-          if #available(iOS 9, *) {
-            if let effectView = self as? UIVisualEffectView {
-              effectView.effect = nil
-              effectView.contentView.alpha = 0.0
-            } else {
-              self.alpha = 0.0
-            }
-          } else {
-            self.alpha = 0.0
-          }
-
-          }, completion: { finished in
-            if finished {
-              self.hidden = true
-            }
-
-            if completion != nil {
-              completion(finished)
-            }
-        })
-      } else {
-        if #available(iOS 9, *) {
-          if let effectView = self as? UIVisualEffectView {
-            effectView.contentView.alpha = 1.0
-          } else {
-            alpha = 0.0
-          }
-        } else {
-          alpha = 0.0
-        }
-        hidden = false
-
-        UIView.animateWithDuration(duration, animations: {
-          if #available(iOS 9, *) {
-            if let effectView = self as? UIVisualEffectView {
-              effectView.effect = effect ?? UIBlurEffect(style: .Light)
-              effectView.contentView.alpha = 1.0
-            } else {
-              self.alpha = 1.0
-            }
-          } else {
-            self.alpha = 1.0
-          }
-        }, completion: completion)
-      }
-    } else {
-      if self is UIVisualEffectView == false {
-        alpha = hide ? 0.0 : 1.0
-      }
-      hidden = hide
-
-      if completion != nil {
-        completion(true)
-      }
+    /**
+     The duration for an animation.
+     */
+    enum AnimationDuration: Double {
+        /// 0.3s, quick animation.
+        case Short = 0.3
+        /// 0.6s, twice as long as the `Short` duration.
+        case Medium = 0.6
+        /// 0.9s, three times as long as the `Short` duration.
+        case Long = 0.9
     }
-  }
-
-  // MARK: Positioning
-
-  /**
-   Calculates and returns: the value for the X origin of the view which will
-   center it in relation to the given frame.
-   The returned X origin is floored.
-   - parameter frame: The frame which the view will use to center itself.
-   - returns: The X origin for the view to take in order to be centered.
-   */
-  public func horizontalCenterWithReferenceFrame(frame: CGRect) -> CGFloat {
-    let offset = floor((frame.size.width - self.frame.size.width) / 2.0)
-    return frame.origin.x + offset
-  }
-
-  /**
-   Calculates and returns: the value for the Y origin of the view which will
-   center it in relation to the given frame.
-   The returned Y origin is floored.
-   - parameter frame: The frame which the view will use to center itself.
-   - returns: The Y origin for the view to take in order to be centered.
-   */
-  public func verticalCenterWithReferenceFrame(frame: CGRect) -> CGFloat {
-    let offset = floor((frame.size.height - self.frame.size.height) / 2.0)
-    return frame.origin.y + offset
-  }
-
-  /**
-   This method centers the view to be centered on the X axis with relation
-   to the passed frame.
-   - parameter rect: The rect which is used as a horizontal centering reference.
-   */
-  public func centerHorizontallyWithReferenceRect(rect: CGRect) {
-    self.frame.origin.x = horizontalCenterWithReferenceFrame(rect)
-  }
-
-  /**
-   This method centers the view to be centered on the Y axis with relation
-   to the passed frame.
-   - parameter rect: The rect which is used as a vertical centering reference.
-   */
-  public func centerVerticallyWithReferenceRect(rect: CGRect) {
-    self.frame.origin.y = verticalCenterWithReferenceFrame(rect)
-  }
-
-  // MARK: Masking
-
-  /**
-   Method to set a rounded edges mask on the view's layer.
-   - parameter radius: The radius to use for the rounded edges.
-   */
-  public func maskToRadius(radius: CGFloat) {
-    layer.cornerRadius = radius
-    layer.masksToBounds = true
-  }
-
-  /**
-   Masks the view's layer to be in a cirle.
-   */
-  public func maskToCircle() {
-    maskToRadius(frame.size.width / 2.0)
-  }
+    
+    // MARK: Hiding
+    
+    // FIXME: This method could get some loving, specially with the iOS 9 UIVisualEffectView stuff.
+    /**
+     Hides or unhides the view with the option the animate the transition.
+     - parameter hidden: Wether the view is to be hidden or not.
+     - parameter animated: Flag to animate the trasition.
+     - parameter duration: The duration of the hiding animation if turned on. `Short` by default.
+     - parameter effect: The `UIVisualEffect` that the view will take when it is shown again.
+     `nil` by default.
+     - parameter completion: Call back when the view has been hid or unhid. `nil` by default.
+     */
+    func setHidden(
+        hide: Bool,
+        animated: Bool,
+        duration: Double = AnimationDuration.Short.rawValue,
+        effect: UIVisualEffect? = nil,
+        completion: ((Bool) -> Void)! = nil
+    ) {
+        if animated {
+            if hide {
+                UIView.animate(withDuration: duration, animations: {
+                    if #available(iOS 9, *) {
+                        if let effectView = self as? UIVisualEffectView {
+                            effectView.effect = nil
+                            effectView.contentView.alpha = 0.0
+                        } else {
+                            self.alpha = 0.0
+                        }
+                    } else {
+                        self.alpha = 0.0
+                    }
+                    
+                }, completion: { finished in
+                    if finished {
+                        self.isHidden = true
+                    }
+                    
+                    if completion != nil {
+                        completion(finished)
+                    }
+                })
+            } else {
+                if #available(iOS 9, *) {
+                    if let effectView = self as? UIVisualEffectView {
+                        effectView.contentView.alpha = 1.0
+                    } else {
+                        alpha = 0.0
+                    }
+                } else {
+                    alpha = 0.0
+                }
+                isHidden = false
+                
+                UIView.animate(withDuration: duration, animations: {
+                    if #available(iOS 9, *) {
+                        if let effectView = self as? UIVisualEffectView {
+                            effectView.effect = effect ?? UIBlurEffect(style: .light)
+                            effectView.contentView.alpha = 1.0
+                        } else {
+                            self.alpha = 1.0
+                        }
+                    } else {
+                        self.alpha = 1.0
+                    }
+                }, completion: completion)
+            }
+        } else {
+            if self is UIVisualEffectView == false {
+                alpha = hide ? 0.0 : 1.0
+            }
+            isHidden = hide
+            
+            if completion != nil {
+                completion(true)
+            }
+        }
+    }
+    
+    // MARK: Positioning
+    
+    /**
+     Calculates and returns: the value for the X origin of the view which will
+     center it in relation to the given frame.
+     The returned X origin is floored.
+     - parameter frame: The frame which the view will use to center itself.
+     - returns: The X origin for the view to take in order to be centered.
+     */
+    func horizontalCenterWithReferenceFrame(frame: CGRect) -> CGFloat {
+        let offset = floor((frame.size.width - self.frame.size.width) / 2.0)
+        return frame.origin.x + offset
+    }
+    
+    /**
+     Calculates and returns: the value for the Y origin of the view which will
+     center it in relation to the given frame.
+     The returned Y origin is floored.
+     - parameter frame: The frame which the view will use to center itself.
+     - returns: The Y origin for the view to take in order to be centered.
+     */
+    func verticalCenterWithReferenceFrame(frame: CGRect) -> CGFloat {
+        let offset = floor((frame.size.height - self.frame.size.height) / 2.0)
+        return frame.origin.y + offset
+    }
+    
+    /**
+     This method centers the view to be centered on the X axis with relation
+     to the passed frame.
+     - parameter rect: The rect which is used as a horizontal centering reference.
+     */
+    func centerHorizontallyWithReferenceRect(rect: CGRect) {
+        self.frame.origin.x = horizontalCenterWithReferenceFrame(frame: rect)
+    }
+    
+    /**
+     This method centers the view to be centered on the Y axis with relation
+     to the passed frame.
+     - parameter rect: The rect which is used as a vertical centering reference.
+     */
+    func centerVerticallyWithReferenceRect(rect: CGRect) {
+        self.frame.origin.y = verticalCenterWithReferenceFrame(frame: rect)
+    }
+    
+    // MARK: Masking
+    
+    /**
+     Method to set a rounded edges mask on the view's layer.
+     - parameter radius: The radius to use for the rounded edges.
+     */
+    func maskToRadius(radius: CGFloat) {
+        layer.cornerRadius = radius
+        layer.masksToBounds = true
+    }
+    
+    /**
+     Masks the view's layer to be in a cirle.
+     */
+    func maskToCircle() {
+        maskToRadius(radius: frame.size.width / 2.0)
+    }
 }
