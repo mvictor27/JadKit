@@ -13,211 +13,203 @@ import XCTest
 @testable import JadKit
 
 class FetchedTableListTests: JadKitTests {
-  private var tableViewController: FetchedTableListViewController!
-
-  private var tableView: UITableView {
-    return tableViewController.tableView
-  }
-
-  override func setUp() {
-    super.setUp()
-
-    tableViewController = FetchedTableListViewController(style: .Plain)
-    tableViewController.fetchedResultsController = fetchedResultsController
-
-    tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: testReuseIdentifier)
-
-    insertAndSaveObjects(10, sectionName: "First")
-    insertAndSaveObjects(5, sectionName: "Second")
-
-    performFetch()
-  }
-
-  override func tearDown() {
-    // Make sure our list controller and view are always in sync.
-    testListRowsAndSections()
-
-    super.tearDown()
-  }
-
-  func testListRowsAndSections() {
-    XCTAssertEqual(tableView.numberOfSections, tableViewController.numberOfSections)
-
-    for section in 0..<tableView.numberOfSections {
-      XCTAssertEqual(tableView.numberOfRowsInSection(section),
-        tableViewController.numberOfRowsInSection(section))
+    private var tableViewController: FetchedTableListViewController!
+    
+    private var tableView: UITableView {
+        return tableViewController.tableView
     }
-  }
-
-  func testDequeueCells() {
-    // Mimic-ish what a UITableViewController would do
-    for section in 0..<tableViewController.numberOfSectionsInTableView(tableView) {
-      for row in 0..<tableViewController.tableView(tableView, numberOfRowsInSection: section) {
-        let indexPath = NSIndexPath(forRow: row, inSection: section)
-        let cell = tableViewController.tableView(tableView,
-          cellForRowAtIndexPath: indexPath)
-
-        if let testObject = tableViewController.objectAtIndexPath(indexPath) {
-          XCTAssertEqual(cell.textLabel!.text, testObject.name)
-        } else {
-          XCTFail()
+    
+    override func setUp() {
+        super.setUp()
+        
+        tableViewController = FetchedTableListViewController(style: .plain)
+        tableViewController.fetchedResultsController = fetchedResultsController
+        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: testReuseIdentifier)
+        
+        insertAndSaveObjects(10, sectionName: "First")
+        insertAndSaveObjects(5, sectionName: "Second")
+        
+        performFetch()
+    }
+    
+    override func tearDown() {
+        // Make sure our list controller and view are always in sync.
+        testListRowsAndSections()
+        
+        super.tearDown()
+    }
+    
+    func testListRowsAndSections() {
+        XCTAssertEqual(tableView.numberOfSections, tableViewController.numberOfSections)
+        
+        for section in 0..<tableView.numberOfSections {
+            XCTAssertEqual(tableView.numberOfRows(inSection: section),
+                           tableViewController.numberOfRows(inSection: section))
         }
-      }
     }
-  }
-
-  func testSelectCells() {
-    // Mimic-ish what a UITableViewController would do
-    for section in 0..<tableViewController.numberOfSectionsInTableView(tableView) {
-      for row in 0..<tableViewController.tableView(tableView, numberOfRowsInSection: section) {
-        let indexPath = NSIndexPath(forRow: row, inSection: section)
-
-        XCTAssertFalse(tableViewController.selectedCellIndexPaths.contains(indexPath))
-        tableViewController.tableView(tableView, didSelectRowAtIndexPath: indexPath)
-        XCTAssertTrue(tableViewController.selectedCellIndexPaths.contains(indexPath))
-      }
+    
+    func testDequeueCells() {
+        // Mimic-ish what a UITableViewController would do
+        for section in 0..<tableViewController.numberOfSections(in: tableView) {
+            for row in 0..<tableViewController.tableView(tableView, numberOfRowsInSection: section) {
+                let indexPath = IndexPath(row: row, section: section)
+                let cell = tableViewController.tableView(tableView,
+                                                         cellForRowAt: indexPath)
+                
+                if let testObject = tableViewController.object(at: indexPath) {
+                    XCTAssertEqual(cell.textLabel!.text, testObject.name)
+                } else {
+                    XCTFail()
+                }
+            }
+        }
     }
-  }
-
-  func testAddingRow() {
-    let numRowsBeforeAdd = tableViewController.numberOfRowsInSection(0)
-    addAndSaveObject(UIColor.cyanColor(), sectionName: "First")
-    XCTAssertEqual(numRowsBeforeAdd + 1, tableViewController.numberOfRowsInSection(0))
-  }
-
-  func testUpdatingRow() {
-    let updateIndexPath = NSIndexPath(forRow: 0, inSection: 0)
-
-    guard let objectToUpdate = tableViewController.objectAtIndexPath(updateIndexPath)
-      as? TestObject else {
-        XCTFail()
-        return
+    
+    func testSelectCells() {
+        // Mimic-ish what a UITableViewController would do
+        for section in 0..<tableViewController.numberOfSections(in: tableView) {
+            for row in 0..<tableViewController.tableView(tableView, numberOfRowsInSection: section) {
+                let indexPath = IndexPath(row: row, section: section)
+                
+                XCTAssertFalse(tableViewController.selectedCellIndexPaths.contains(indexPath))
+                tableViewController.tableView(tableView, didSelectRowAt: indexPath)
+                XCTAssertTrue(tableViewController.selectedCellIndexPaths.contains(indexPath))
+            }
+        }
     }
-
-    XCTAssertNotEqual(objectToUpdate.color, UIColor.cyanColor())
-
-    updateAndSaveObject(forName: objectToUpdate.name) { object in
-      object.color = UIColor.cyanColor()
+    
+    func testAddingRow() {
+        let numRowsBeforeAdd = tableViewController.numberOfRows(inSection: 0)
+        addAndSaveObject(color: UIColor.cyan, sectionName: "First")
+        XCTAssertEqual(numRowsBeforeAdd + 1, tableViewController.numberOfRows(inSection: 0))
     }
-
-    guard let updatedObject = tableViewController.objectAtIndexPath(updateIndexPath)
-      as? TestObject else {
-        XCTFail()
-        return
+    
+    func testUpdatingRow() {
+        let updateIndexPath = IndexPath(row: 0, section: 0)
+        
+        guard let objectToUpdate = tableViewController.object(at: updateIndexPath) else {
+            XCTFail()
+            return
+        }
+        
+        XCTAssertNotEqual(objectToUpdate.color, UIColor.cyan)
+        
+        updateAndSaveObject(forName: objectToUpdate.name) { object in
+            object.color = UIColor.cyan
+        }
+        
+        guard let updatedObject = tableViewController.object(at: updateIndexPath) else {
+            XCTFail()
+            return
+        }
+        
+        XCTAssertEqual(updatedObject.color, UIColor.cyan)
     }
-
-    XCTAssertEqual(updatedObject.color, UIColor.cyanColor())
-  }
-
-  func testDeletingRow() {
-    let numRowsBeforeDelete = tableViewController.numberOfRowsInSection(0)
-
-    guard let objectToDelete = tableViewController.objectAtIndexPath(NSIndexPath(forRow: 0, inSection: 0))
-      as? TestObject else {
-        XCTFail()
-        return
+    
+    func testDeletingRow() {
+        let numRowsBeforeDelete = tableViewController.numberOfRows(inSection: 0)
+        
+        guard let objectToDelete = tableViewController.object(at: IndexPath(row: 0, section: 0)) else {
+            XCTFail()
+            return
+        }
+        
+        deleteAndSaveObject(objectToDelete)
+        XCTAssertEqual(numRowsBeforeDelete - 1, tableViewController.numberOfRows(inSection: 0))
     }
-
-    deleteAndSaveObject(objectToDelete)
-    XCTAssertEqual(numRowsBeforeDelete - 1, tableViewController.numberOfRowsInSection(0))
-  }
-
-  func testMovingRow() {
-    let numRowsInSectionOneBeforeMove = tableViewController.numberOfRowsInSection(0)
-    let numRowsInSectionTwoBeforeMove = tableViewController.numberOfRowsInSection(1)
-
-    guard let objectToMove = tableViewController.objectAtIndexPath(NSIndexPath(forRow: 0, inSection: 0))
-      as? TestObject else {
-        XCTFail()
-        return
+    
+    func testMovingRow() {
+        let numRowsInSectionOneBeforeMove = tableViewController.numberOfRows(inSection: 0)
+        let numRowsInSectionTwoBeforeMove = tableViewController.numberOfRows(inSection: 1)
+        
+        guard let objectToMove = tableViewController.object(at: IndexPath(row: 0, section: 0)) else {
+            XCTFail()
+            return
+        }
+        
+        updateAndSaveObject(forName: objectToMove.name) { object in
+            object.sectionName = "Second"
+        }
+        
+        XCTAssertEqual(numRowsInSectionOneBeforeMove - 1, tableViewController.numberOfRows(inSection: 0))
+        XCTAssertEqual(numRowsInSectionTwoBeforeMove + 1, tableViewController.numberOfRows(inSection: 1))
     }
-
-    updateAndSaveObject(forName: objectToMove.name) { object in
-      object.sectionName = "Second"
+    
+    func testAddingSection() {
+        // TODO: Add a section.
     }
-
-    XCTAssertEqual(numRowsInSectionOneBeforeMove - 1, tableViewController.numberOfRowsInSection(0))
-    XCTAssertEqual(numRowsInSectionTwoBeforeMove + 1, tableViewController.numberOfRowsInSection(1))
-  }
-
-  func testAddingSection() {
-    // TODO: Add a section.
-  }
-
-  func testUpdatingSection() {
-    // TODO: Figure out how to test updating a section.
-  }
-
-  func testDeletingSection() {
-    let numSectionsBeforeDelete = tableViewController.numberOfSections
-    deleteAndSaveSection("First")
-    XCTAssertEqual(numSectionsBeforeDelete - 1, tableViewController.numberOfSections)
-  }
+    
+    func testUpdatingSection() {
+        // TODO: Figure out how to test updating a section.
+    }
+    
+    func testDeletingSection() {
+        let numSectionsBeforeDelete = tableViewController.numberOfSections
+        deleteAndSaveSectionName("First")
+        XCTAssertEqual(numSectionsBeforeDelete - 1, tableViewController.numberOfSections)
+    }
 }
 
 private class FetchedTableListViewController: UITableViewController, FetchedTableList {
-  var fetchedResultsController: NSFetchedResultsController! {
-    didSet {
-      fetchedResultsController.delegate = self
+    
+    var fetchedResultsController: NSFetchedResultsController<TestObject>! {
+        didSet {
+            fetchedResultsController.delegate = self
+        }
     }
-  }
-
-  var selectedCellIndexPaths = [NSIndexPath]()
-
-  func cellIdentifierForIndexPath(indexPath: NSIndexPath) -> String {
-    return testReuseIdentifier
-  }
-
-  func listView(listView: UITableView, configureCell cell: UITableViewCell,
-    withObject object: AnyObject, atIndexPath indexPath: NSIndexPath) {
-      if let testObject = object as? TestObject {
-        cell.textLabel?.text = testObject.name
-      }
-  }
-
-  func listView(listView: UITableView, didSelectObject object: AnyObject,
-    atIndexPath indexPath: NSIndexPath) {
-      selectedCellIndexPaths.append(indexPath)
-  }
-
-  // MARK: Table View
-
-  override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-    return numberOfSections
-  }
-
-  override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return numberOfRowsInSection(section)
-  }
-
-  override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath)
-    -> UITableViewCell {
-      return tableCellAtIndexPath(indexPath)
-  }
-
-  override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-    tableDidSelectItemAtIndexPath(indexPath)
-  }
-
-  // MARK: Fetched Controller
-
-  @objc func controllerWillChangeContent(controller: NSFetchedResultsController) {
-    tableWillChangeContent()
-  }
-
-  @objc func controller(controller: NSFetchedResultsController,
-    didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int,
-    forChangeType type: NSFetchedResultsChangeType) {
-      tableDidChangeSection(sectionIndex, withChangeType: type)
-  }
-
-  @objc func controller(controller: NSFetchedResultsController,
-    didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?,
-    forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-      tableDidChangeObjectAtIndexPath(indexPath, withChangeType: type, newIndexPath: newIndexPath)
-  }
-
-  @objc func controllerDidChangeContent(controller: NSFetchedResultsController) {
-    tableDidChangeContent()
-  }
+    
+    var selectedCellIndexPaths = [IndexPath]()
+    
+    func cellIdentifier(for indexPath: IndexPath) -> String {
+        return testReuseIdentifier
+    }
+    
+    func listView(_ listView: UITableView, configure cell: UITableViewCell,
+                  with anObject: TestObject, at indexPath: IndexPath) {
+        cell.textLabel?.text = anObject.name
+    }
+    
+    func listView(_ listView: UITableView, didSelect anObject: TestObject,
+                  at indexPath: IndexPath) {
+        selectedCellIndexPaths.append(indexPath)
+    }
+    
+    // MARK: Table View
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return numberOfSections
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return numberOfRows(inSection: section)
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return tableCell(at: indexPath)
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableDidSelectItem(at: indexPath)
+    }
+    
+    // MARK: Fetched Controller
+    
+    @objc func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableWillChangeContent()
+    }
+    
+    @objc func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
+                          didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int,
+                          for type: NSFetchedResultsChangeType) {
+        tableDidChangeSection(sectionIndex, withChangeType: type)
+    }
+    
+    @objc func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        tableDidChangeObject(at: indexPath, withChangeType: type, newIndexPath: newIndexPath)
+    }
+    
+    @objc func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableDidChangeContent()
+    }
 }

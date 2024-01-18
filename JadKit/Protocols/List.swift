@@ -40,37 +40,37 @@ import UIKit
  This protocol outlines the most basic bhaviour that a list should implement.
  */
 public protocol List {
-  /// The list view for the list (i.e. `UITableView`).
-  associatedtype ListView
-  /// The list cell view (i.e. `UITableViewCell`).
-  associatedtype Cell
-  /// The object that is tied to each cell.
-  associatedtype Object
-
-  /**
-   The cell identifier for the given index path.
-   - parameter indexPath: The index path of the cell.
-   - returns: The cell identifier.
-   */
-  func cellIdentifierForIndexPath(indexPath: NSIndexPath) -> String
-
-  /**
-   Helper method to configure a cell at the given index path with a given
-   object.
-   - parameter listView: The list view that is cnofiguring the cell.
-   - parameter cell: The cell to configure.
-   - parameter object: The object which matches the cell's index path.
-   - parameter indexPath: The index path of the cell to configure.
-   */
-  func listView(listView: ListView, configureCell cell: Cell, withObject object: Object,
-                atIndexPath indexPath: NSIndexPath)
-
-  /**
-   Called when the user selects a cell at the given index path.
-   - parameter listView: The list view that is interacted with.
-   - parameter object: The object at the selected index path.
-   - parameter indexPath: The index path of the cell which was selected.
-   */
-  func listView(listView: ListView, didSelectObject object: Object,
-                atIndexPath indexPath: NSIndexPath)
+    /// The list view for the list (i.e. `UITableView`).
+    associatedtype ListView
+    /// The list cell view (i.e. `UITableViewCell`).
+    associatedtype Cell
+    /// The object that is tied to each cell.
+    associatedtype Object
+    
+    /**
+     The cell identifier for the given index path.
+     - parameter indexPath: The index path of the cell.
+     - returns: The cell identifier.
+     */
+    func cellIdentifier(for indexPath: IndexPath) -> String
+    
+    /**
+     Helper method to configure a cell at the given index path with a given
+     object.
+     - parameter listView: The list view that is cnofiguring the cell.
+     - parameter cell: The cell to configure.
+     - parameter object: The object which matches the cell's index path.
+     - parameter indexPath: The index path of the cell to configure.
+     */
+    func listView(_ listView: ListView, configure cell: Cell, with anObject: Object,
+                  at indexPath: IndexPath)
+    
+    /**
+     Called when the user selects a cell at the given index path.
+     - parameter listView: The list view that is interacted with.
+     - parameter object: The object at the selected index path.
+     - parameter indexPath: The index path of the cell which was selected.
+     */
+    func listView(_ listView: ListView, didSelect anObject: Object,
+                  at indexPath: IndexPath)
 }

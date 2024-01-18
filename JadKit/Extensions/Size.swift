@@ -36,13 +36,13 @@
 import UIKit
 
 public extension CGSize {
-  /// The resulting size from flooring the width and height.
-  public var floorSize: CGSize {
-    return CGSize(width: floor(width), height: floor(height))
-  }
-
-  /// The resulting size from ceiling the width and height.
-  public var ceilSize: CGSize {
-    return CGSize(width: ceil(width), height: ceil(height))
-  }
+    /// The resulting size from flooring the width and height.
+    var floorSize: CGSize {
+        return CGSize(width: floor(width), height: floor(height))
+    }
+    
+    /// The resulting size from ceiling the width and height.
+    var ceilSize: CGSize {
+        return CGSize(width: ceil(width), height: ceil(height))
+    }
 }

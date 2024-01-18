@@ -36,24 +36,24 @@
 import UIKit
 
 public extension UIViewController {
-  /// Whether the view controller was presented modally or not.
-  public var modal: Bool {
-    if self.presentingViewController?.presentedViewController == self {
-      return true
+    /// Whether the view controller was presented modally or not.
+    var modal: Bool {
+        if self.presentingViewController?.presentedViewController == self {
+            return true
+        }
+        
+        // UINavigationController
+        if self.navigationController != nil &&
+            self.navigationController?.presentingViewController?.presentedViewController ==
+            self.navigationController {
+            return true
+        }
+        
+        // UITabBarController
+        if self.tabBarController?.presentingViewController is UITabBarController {
+            return true
+        }
+        
+        return false
     }
-
-    // UINavigationController
-    if self.navigationController != nil &&
-      self.navigationController?.presentingViewController?.presentedViewController ==
-      self.navigationController {
-      return true
-    }
-
-    // UITabBarController
-    if self.tabBarController?.presentingViewController is UITabBarController {
-      return true
-    }
-    
-    return false
-  }
 }

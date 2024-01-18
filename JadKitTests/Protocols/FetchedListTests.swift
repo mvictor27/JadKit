@@ -31,54 +31,54 @@ class FetchedListTests: JadKitTests, FetchedList {
       XCTAssertEqual(numberOfSections, sections.count)
 
       for sectionIndex in 0..<sections.count {
-        XCTAssertEqual(numberOfRowsInSection(sectionIndex), sections[sectionIndex].numberOfObjects)
+          XCTAssertEqual(numberOfRows(inSection: sectionIndex), sections[sectionIndex].numberOfObjects)
       }
     }
   }
 
   func testValidIndexPath() {
-    XCTAssertTrue(isValidIndexPath(NSIndexPath(forRow: 0, inSection: 1)))
+    XCTAssertTrue(isValid(IndexPath(row: 0, section: 1)))
   }
 
   func testInvalidIndexPath() {
-    XCTAssertFalse(isValidIndexPath(NSIndexPath(forRow: 1, inSection: 10)))
+    XCTAssertFalse(isValid(IndexPath(row: 1, section: 10)))
   }
 
   func testObjectAtIndexPathSectionTooBig() {
-    XCTAssertNil(objectAtIndexPath(NSIndexPath(forRow: 0, inSection: 2)))
+    XCTAssertNil(object(at: IndexPath(row: 0, section: 2)))
   }
 
   func testObjectAtIndexPathSectionTooSmall() {
-    XCTAssertNil(objectAtIndexPath(NSIndexPath(forRow: 0, inSection: -1)))
+    XCTAssertNil(object(at: IndexPath(row: 0, section: -1)))
   }
 
   func testObjectAtIndexPathRowTooBig() {
-    XCTAssertNil(objectAtIndexPath(NSIndexPath(forRow: 10, inSection: 0)))
+    XCTAssertNil(object(at: IndexPath(row: 10, section: 0)))
   }
 
   func testObjectAtIndexPathRowTooSmall() {
-    XCTAssertNil(objectAtIndexPath(NSIndexPath(forRow: -1, inSection: 0)))
+    XCTAssertNil(object(at: IndexPath(row: -1, section: 0)))
   }
 
   func testValidSectionNames() {
-    XCTAssertEqual(titleForHeaderInSection(0), "First")
-    XCTAssertEqual(titleForHeaderInSection(1), "Second")
+      XCTAssertEqual(titleForHeader(inSection:0), "First")
+      XCTAssertEqual(titleForHeader(inSection:1), "Second")
   }
 
   func testInvalidSectionNames() {
-    XCTAssertNil(titleForHeaderInSection(2))
-    XCTAssertNil(titleForHeaderInSection(-2))
+      XCTAssertNil(titleForHeader(inSection:2))
+      XCTAssertNil(titleForHeader(inSection:-2))
   }
 
   // MARK: Conformance
 
-  func cellIdentifierForIndexPath(indexPath: NSIndexPath) -> String {
+  func cellIdentifier(for indexPath: IndexPath) -> String {
     return testReuseIdentifier
   }
 
-  func listView(listView: ListView, configureCell cell: Cell, withObject object: Object,
-    atIndexPath indexPath: NSIndexPath) { }
+  func listView(_ listView: ListView, configure cell: Cell, with anObject: Object,
+    at indexPath: IndexPath) { }
 
-  func listView(listView: ListView, didSelectObject object: Object,
-    atIndexPath indexPath: NSIndexPath) { }
+  func listView(_ listView: ListView, didSelect anObject: Object,
+    at indexPath: IndexPath) { }
 }
