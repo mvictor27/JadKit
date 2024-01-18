@@ -21,10 +21,10 @@ class TableListTests: JadKitTests {
   override func setUp() {
     super.setUp()
 
-    tableViewController = TableListViewController(style: .Plain)
+      tableViewController = TableListViewController(style: .plain)
     tableViewController.listData = listData
 
-    tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: testReuseIdentifier)
+      tableView.register(UITableViewCell.self, forCellReuseIdentifier: testReuseIdentifier)
   }
 
   override func tearDown() {
@@ -71,39 +71,39 @@ class TableListTests: JadKitTests {
 }
 
 private class TableListViewController: UITableViewController, TableList {
-  var listData: [[TestObject]]!
-  var selectedCellIndexPaths = [IndexPath]()
-
-  func cellIdentifier(for indexPath: IndexPath) -> String {
-    return testReuseIdentifier
-  }
-
-  func listView(_ listView: UITableView, configure cell: UITableViewCell,
-    with anObject: TestObject, at indexPath: IndexPath) {
-      cell.textLabel?.text = object.name
-  }
-
-  func listView(_ listView: UITableView, didSelect anObject: TestObject,
-    at indexPath: IndexPath) {
-      selectedCellIndexPaths.append(indexPath)
-  }
-
-  // MARK: Table View
-
-  override func numberOfSections(in: tableView: UITableView) -> Int {
-    return numberOfSections
-  }
-
-  override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return numberOfRows(inSection: section)
-  }
-
-  override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: IndexPath)
+    var listData: [[TestObject]]!
+    var selectedCellIndexPaths = [IndexPath]()
+    
+    func cellIdentifier(for indexPath: IndexPath) -> String {
+        return testReuseIdentifier
+    }
+    
+    func listView(_ listView: UITableView, configure cell: UITableViewCell,
+                  with anObject: TestObject, at indexPath: IndexPath) {
+        cell.textLabel?.text = anObject.name
+    }
+    
+    func listView(_ listView: UITableView, didSelect anObject: TestObject,
+                  at indexPath: IndexPath) {
+        selectedCellIndexPaths.append(indexPath)
+    }
+    
+    // MARK: Table View
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return numberOfSections
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return numberOfRows(inSection: section)
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
     -> UITableViewCell {
-      return tableCell(at: indexPath)
-  }
-
-  override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
-    tableDidSelectItem(at: indexPath)
-  }
+        return tableCell(at: indexPath)
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableDidSelectItem(at: indexPath)
+    }
 }

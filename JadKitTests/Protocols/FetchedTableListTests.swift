@@ -202,7 +202,7 @@ private class FetchedTableListViewController: UITableViewController, FetchedTabl
     @objc func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
                           didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int,
                           for type: NSFetchedResultsChangeType) {
-        tableDidChangeSection(sectionIndex: sectionIndex, withChangeType: type)
+        tableDidChange(section: sectionIndex, withChangeType: type)
     }
     
     @objc func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {

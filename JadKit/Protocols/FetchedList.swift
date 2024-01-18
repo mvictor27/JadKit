@@ -182,14 +182,14 @@ public extension FetchedTableList where ListView == UITableView, Cell == UITable
      - parameter type: The type of change (insert or delete). Valid values are
      `NSFetchedResultsChangeInsert` and `NSFetchedResultsChangeDelete`.
      */
-    func tableDidChangeSection(sectionIndex: Int, withChangeType type: NSFetchedResultsChangeType) {
+    func tableDidChange(section: Int, withChangeType type: NSFetchedResultsChangeType) {
         switch type {
             case .insert:
-                tableView.insertSections(IndexSet(integer: sectionIndex), with: .automatic)
+                tableView.insertSections(IndexSet(integer: section), with: .automatic)
             case .delete:
-                tableView.deleteSections(IndexSet(integer: sectionIndex), with: .automatic)
+                tableView.deleteSections(IndexSet(integer: section), with: .automatic)
             case .update:
-                tableView.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
+                tableView.reloadSections(IndexSet(integer: section), with: .automatic)
             default:
                 // FIXME: Figure out what to do with .Move
                 break
