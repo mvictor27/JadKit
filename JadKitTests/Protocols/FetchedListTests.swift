@@ -61,13 +61,13 @@ class FetchedListTests: JadKitTests, FetchedList {
   }
 
   func testValidSectionNames() {
-      XCTAssertEqual(titleForHeaderInSection(section: 0), "First")
-      XCTAssertEqual(titleForHeaderInSection(section: 1), "Second")
+      XCTAssertEqual(titleForHeader(inSection:0), "First")
+      XCTAssertEqual(titleForHeader(inSection:1), "Second")
   }
 
   func testInvalidSectionNames() {
-      XCTAssertNil(titleForHeaderInSection(section: 2))
-      XCTAssertNil(titleForHeaderInSection(section: -2))
+      XCTAssertNil(titleForHeader(inSection:2))
+      XCTAssertNil(titleForHeader(inSection:-2))
   }
 
   // MARK: Conformance

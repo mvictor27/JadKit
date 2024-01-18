@@ -114,7 +114,7 @@ public extension FetchedList {
    - parameter section: The section for the header's title to grab.
    - returns: The header title for the section or `nil` if none is found.
    */
-  func titleForHeaderInSection(section: Int) -> String? {
+  func titleForHeader(inSection section: Int) -> String? {
     guard isValid(IndexPath(row: 0, section: section)) else {
       return nil
     }
