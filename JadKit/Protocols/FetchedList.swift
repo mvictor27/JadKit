@@ -182,7 +182,7 @@ public extension FetchedTableList where ListView == UITableView, Cell == UITable
      - parameter type: The type of change (insert or delete). Valid values are
      `NSFetchedResultsChangeInsert` and `NSFetchedResultsChangeDelete`.
      */
-    func tableDidChange(section: Int, withChangeType type: NSFetchedResultsChangeType) {
+    func tableDidChangeSection(_ section: Int, withChangeType type: NSFetchedResultsChangeType) {
         switch type {
             case .insert:
                 tableView.insertSections(IndexSet(integer: section), with: .automatic)
